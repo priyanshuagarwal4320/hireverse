@@ -14,6 +14,21 @@
         </a>
     </div>
 
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <p class="text-lg font-extrabold">{{ $jobs->total() }}</p>
+            <p class="text-xs text-gray-500 font-semibold">Total jobs</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <p class="text-lg font-extrabold text-green-600">{{ $openCount }}</p>
+            <p class="text-xs text-gray-500 font-semibold">Open</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <p class="text-lg font-extrabold text-red-600">{{ $closedCount }}</p>
+            <p class="text-xs text-gray-500 font-semibold">Closed</p>
+        </div>
+    </div>
+
     @if (session('status'))
         <div class="mb-6 px-4 py-3 rounded-xl bg-green-50 text-green-700 text-sm font-semibold flex items-center gap-2">
             <i class="fas fa-check-circle"></i> {{ session('status') }}

@@ -11,11 +11,15 @@ class JobPostController extends Controller
 {
 
     public function index(): View
-    {
-        $jobs = auth()->user()->company->jobPosts()->latest()->paginate(10);
+{
+    $company = auth()->user()->company;
 
-        return view('company.jobs.index', compact('jobs'));
-    }
+    $jobs = $company->jobPosts()->latest()->paginate(10);
+    $openCount = $company->jobPosts()->where('status', 'open')->count();
+    $closedCount = $company->jobPosts()->where('status', 'closed')->count();
+
+    return view('company.jobs.index', compact('jobs', 'openCount', 'closedCount'));
+}
 
     public function create(): View
     {
