@@ -33,11 +33,34 @@ class DashboardController extends Controller
 
     public function company()
     {
-        return view('dashboard.company');
+        $company = auth()->user()->company;
+
+        $totalJobs = $company->jobPosts()->count();
+        $openJobs = $company->jobPosts()->where('status', 'open')->count();
+
+        $totalApplicants = Application::whereIn('job_post_id', $company->jobPosts()->pluck('id'))->count();
+
+        $recentJobs = $company->jobPosts()->latest()->take(5)->get();
+
+        return view('dashboard.company', compact(
+            'company',
+            'totalJobs',
+            'openJobs',
+            'totalApplicants',
+            'recentJobs'
+        ));
     }
 
     public function candidate()
     {
-        return view('dashboard.candidate');
+        $candidate = auth()->user()->candidate;
+
+        $openJobs = JobPost::where('status', 'open')->with('company')->latest()->take(10)->get();
+
+        $myApplications = $candidate
+            ? $candidate->applications()->with('jobPost')->latest()->get()
+            : collect();
+
+        return view('dashboard.candidate', compact('openJobs', 'myApplications'));
     }
 }
