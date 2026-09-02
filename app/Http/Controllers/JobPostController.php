@@ -6,6 +6,7 @@ use App\Models\JobPost;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\Application;
 
 class JobPostController extends Controller
 {
@@ -82,5 +83,13 @@ class JobPostController extends Controller
         ]);
 
         return redirect()->route('company.jobs.index')->with('status', 'Job status updated.');
+    }
+    public function applicants(JobPost $job): View
+    {
+        abort_if($job->company_id !== auth()->user()->company->id, 403);
+
+        $applications = $job->applications()->with('candidate.user')->latest()->get();
+
+        return view('company.jobs.applicants', compact('job', 'applications'));
     }
 }

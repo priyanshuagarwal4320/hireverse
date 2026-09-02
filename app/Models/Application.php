@@ -17,6 +17,9 @@ class Application extends Model
         'applied_date',
         'status',
     ];
+    protected $casts = [
+        'applied_date' => 'date',
+    ];
 
     public function candidate(): BelongsTo
     {

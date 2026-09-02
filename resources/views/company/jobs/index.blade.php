@@ -63,7 +63,8 @@
                             </span>
                         </td>
                         <td class="px-5 py-3 text-right">
-                            <div class="flex items-center justify-end gap-2">
+                            <div class="flex items-center justify-end gap-3">
+                                <a href="{{ route('company.jobs.applicants', $job) }}" class="text-xs font-semibold text-blue-600">Applicants</a>
                                 <a href="{{ route('company.jobs.edit', $job) }}" class="text-xs font-semibold text-violet-600">Edit</a>
                                 <form method="POST" action="{{ route('company.jobs.toggle-status', $job) }}">
                                     @csrf

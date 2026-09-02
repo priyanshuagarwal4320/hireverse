@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\ApplicationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,6 +53,17 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::patch('/company/jobs/{job}/toggle-status', [JobPostController::class, 'toggleStatus'])
         ->name('company.jobs.toggle-status');
+
+    Route::get('/company/jobs/{job}/applicants', [JobPostController::class, 'applicants'])
+        ->name('company.jobs.applicants');
+
+    Route::patch('/applications/{application}/status', [ApplicationController::class, 'updateStatus'])
+        ->name('applications.update-status');
+});
+
+Route::middleware(['auth', 'role:candidate'])->group(function () {
+    Route::post('/jobs/{job}/apply', [ApplicationController::class, 'store'])
+        ->name('applications.store');
 });
 
 Route::middleware('auth')->group(function () {
