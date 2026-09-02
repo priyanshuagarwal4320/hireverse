@@ -20,7 +20,7 @@
             <a href="{{ route('company.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Dashboard</a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">Recruitment</p>
             <a href="{{ route('company.profile.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Company profile</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">My jobs</a>
+            <a href="{{ route('company.jobs.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">My jobs</a>
         @else
             <a href="{{ route('candidate.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Browse jobs</a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">My account</p>

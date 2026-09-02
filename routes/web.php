@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobPostController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,15 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::put('/company/profile', [CompanyProfileController::class, 'update'])
         ->name('company.profile.update');
+        
+    Route::get('/company/jobs', [JobPostController::class, 'index'])
+        ->name('company.jobs.index');
+
+    Route::get('/company/jobs/create', [JobPostController::class, 'create'])
+        ->name('company.jobs.create');
+
+    Route::post('/company/jobs', [JobPostController::class, 'store'])
+        ->name('company.jobs.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -41,4 +51,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -6,6 +6,10 @@
 
     <div class="flex items-center justify-between mb-1">
         <h1 class="text-xl font-extrabold">{{ $company->company_name }}</h1>
+        <a href="{{ route('company.jobs.create') }}"
+            class="text-xs font-bold px-4 py-2 rounded-lg bg-gray-900 text-white inline-flex items-center">
+            <i class="fas fa-plus mr-2"></i>Post a job
+        </a>
     </div>
     <p class="text-gray-500 text-sm mb-6">Manage your job postings and applicants</p>
 
@@ -53,7 +57,8 @@
                         <td class="px-5 py-3">{{ ucfirst(str_replace('_', ' ', $job->job_type)) }}</td>
                         <td class="px-5 py-3">{{ $job->vacancies }}</td>
                         <td class="px-5 py-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full
                                 {{ $job->status === 'open' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' }}">
                                 {{ ucfirst($job->status) }}
                             </span>
