@@ -9,7 +9,8 @@
             <h1 class="text-xl font-extrabold mb-1">My jobs</h1>
             <p class="text-gray-500 text-sm">All job posts from your company</p>
         </div>
-        <a href="{{ route('company.jobs.create') }}" class="text-xs font-bold px-4 py-2 rounded-lg bg-gray-900 text-white inline-flex items-center">
+        <a href="{{ route('company.jobs.create') }}"
+            class="text-xs font-bold px-4 py-2 rounded-lg bg-gray-900 text-white inline-flex items-center">
             <i class="fas fa-plus mr-2"></i>Post a job
         </a>
     </div>
@@ -44,6 +45,7 @@
                     <th class="px-5 py-3">Location</th>
                     <th class="px-5 py-3">Vacancies</th>
                     <th class="px-5 py-3">Status</th>
+                    <th class="px-5 py-3 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,15 +56,28 @@
                         <td class="px-5 py-3">{{ $job->location ?: '—' }}</td>
                         <td class="px-5 py-3">{{ $job->vacancies }}</td>
                         <td class="px-5 py-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full
                                 {{ $job->status === 'open' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' }}">
                                 {{ ucfirst($job->status) }}
                             </span>
                         </td>
+                        <td class="px-5 py-3 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('company.jobs.edit', $job) }}" class="text-xs font-semibold text-violet-600">Edit</a>
+                                <form method="POST" action="{{ route('company.jobs.toggle-status', $job) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="text-xs font-semibold {{ $job->status === 'open' ? 'text-red-600' : 'text-green-600' }}">
+                                        {{ $job->status === 'open' ? 'Close' : 'Reopen' }}
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-5 py-10 text-center text-gray-400">
+                        <td colspan="6" class="px-5 py-10 text-center text-gray-400">
                             You haven't posted any jobs yet.
                         </td>
                     </tr>

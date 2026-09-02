@@ -33,4 +33,7 @@ class JobPost extends Model
     {
         return $this->hasMany(Application::class);
     }
+    protected $casts = [
+        'last_date' => 'date',
+    ];
 }

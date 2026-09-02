@@ -34,7 +34,7 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::put('/company/profile', [CompanyProfileController::class, 'update'])
         ->name('company.profile.update');
-        
+
     Route::get('/company/jobs', [JobPostController::class, 'index'])
         ->name('company.jobs.index');
 
@@ -43,6 +43,15 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::post('/company/jobs', [JobPostController::class, 'store'])
         ->name('company.jobs.store');
+
+    Route::get('/company/jobs/{job}/edit', [JobPostController::class, 'edit'])
+        ->name('company.jobs.edit');
+
+    Route::put('/company/jobs/{job}', [JobPostController::class, 'update'])
+        ->name('company.jobs.update');
+
+    Route::patch('/company/jobs/{job}/toggle-status', [JobPostController::class, 'toggleStatus'])
+        ->name('company.jobs.toggle-status');
 });
 
 Route::middleware('auth')->group(function () {
