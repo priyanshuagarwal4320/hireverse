@@ -1,4 +1,4 @@
-<aside class="w-60 bg-white border-r border-gray-200 flex-shrink-0">
+<aside class="w-60 h-full overflow-y-auto bg-white border-r border-gray-200 flex-shrink-0">
     <div class="flex items-center gap-2 px-4 py-5 border-b border-gray-200">
         <svg width="26" height="26" viewBox="0 0 100 100">
             <rect width="100" height="100" rx="24" fill="#171a2e"/>
@@ -19,7 +19,7 @@
         @elseif(auth()->user()->role === 'company')
             <a href="{{ route('company.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Dashboard</a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">Recruitment</p>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Company profile</a>
+            <a href="{{ route('company.profile.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Company profile</a>
             <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">My jobs</a>
         @else
             <a href="{{ route('candidate.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Browse jobs</a>

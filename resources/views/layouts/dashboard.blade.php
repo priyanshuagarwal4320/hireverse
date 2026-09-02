@@ -9,13 +9,13 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
-    <div class="flex min-h-screen">
+    <div class="flex h-screen overflow-hidden">
         @include('partials.sidebar')
 
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col overflow-hidden">
             @include('partials.topbar')
 
-            <main class="flex-1 p-7">
+            <main class="flex-1 overflow-y-auto p-7">
                 @yield('content')
             </main>
 

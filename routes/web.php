@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CompanyProfileController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,17 +14,25 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'admin'])
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
         ->middleware('role:admin')
         ->name('admin.dashboard');
 
-    Route::get('/company/dashboard', [App\Http\Controllers\DashboardController::class, 'company'])
+    Route::get('/company/dashboard', [DashboardController::class, 'company'])
         ->middleware('role:company')
         ->name('company.dashboard');
 
-    Route::get('/candidate/dashboard', [App\Http\Controllers\DashboardController::class, 'candidate'])
+    Route::get('/candidate/dashboard', [DashboardController::class, 'candidate'])
         ->middleware('role:candidate')
         ->name('candidate.dashboard');
+});
+
+Route::middleware(['auth', 'role:company'])->group(function () {
+    Route::get('/company/profile', [CompanyProfileController::class, 'edit'])
+        ->name('company.profile.edit');
+
+    Route::put('/company/profile', [CompanyProfileController::class, 'update'])
+        ->name('company.profile.update');
 });
 
 Route::middleware('auth')->group(function () {
