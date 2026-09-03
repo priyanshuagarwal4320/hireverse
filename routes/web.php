@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\InterviewController;
+use App\Http\Controllers\ResultController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -66,6 +67,12 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::post('/applications/{application}/interview', [InterviewController::class, 'store'])
         ->name('interviews.store');
+
+    Route::get('/interviews/{interview}/result/create', [ResultController::class, 'create'])
+        ->name('results.create');
+
+    Route::post('/interviews/{interview}/result', [ResultController::class, 'store'])
+        ->name('results.store');
 });
 
 Route::middleware(['auth', 'role:candidate'])->group(function () {
@@ -74,6 +81,9 @@ Route::middleware(['auth', 'role:candidate'])->group(function () {
 
     Route::get('/candidate/interviews', [InterviewController::class, 'index'])
         ->name('candidate.interviews');
+
+    Route::get('/candidate/results', [ResultController::class, 'index'])
+        ->name('candidate.results');
 });
 
 Route::middleware('auth')->group(function () {

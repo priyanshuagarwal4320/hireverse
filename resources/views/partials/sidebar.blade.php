@@ -43,6 +43,8 @@
                 applications</a>
             <a href="{{ route('candidate.interviews') }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Interviews</a>
+            <a href="{{ route('candidate.results') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Results</a>
         @endif
     </nav>
 

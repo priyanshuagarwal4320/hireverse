@@ -66,6 +66,16 @@
                                         <span class="text-xs font-semibold text-green-600">
                                             <i class="fas fa-check-circle"></i> Interview set
                                         </span>
+                                        @if ($application->interview->result)
+                                            <span class="text-xs font-semibold text-violet-600">
+                                                <i class="fas fa-poll"></i> Result: {{ ucfirst($application->interview->result->status) }}
+                                            </span>
+                                        @else
+                                            <a href="{{ route('results.create', $application->interview) }}"
+                                                class="text-xs font-semibold text-amber-600">
+                                                Record result
+                                            </a>
+                                        @endif
                                     @else
                                         <a href="{{ route('interviews.create', $application) }}"
                                             class="text-xs font-semibold text-blue-600">
