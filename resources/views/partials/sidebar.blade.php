@@ -11,6 +11,7 @@
 
     <nav class="p-4 space-y-1">
         @if (auth()->user()->role === 'admin')
+        <p class="text-xs font-bold text-gray-400 uppercase px-3 pb-1">Main</p>
             <a href="{{ route('admin.dashboard') }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-gauge-high w-4 text-center"></i> Dashboard
@@ -26,6 +27,7 @@
                 <i class="fas fa-briefcase w-4 text-center"></i> Jobs
             </a>
         @elseif(auth()->user()->role === 'company')
+        <p class="text-xs font-bold text-gray-400 uppercase px-3 pb-1">Main</p>
             <a href="{{ route('company.dashboard') }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('company.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-gauge-high w-4 text-center"></i> Dashboard
@@ -40,6 +42,7 @@
                 <i class="fas fa-briefcase w-4 text-center"></i> My jobs
             </a>
         @else
+        <p class="text-xs font-bold text-gray-400 uppercase px-3 pb-1">Main</p>
             <a href="{{ route('candidate.dashboard') }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-magnifying-glass w-4 text-center"></i> Browse jobs
