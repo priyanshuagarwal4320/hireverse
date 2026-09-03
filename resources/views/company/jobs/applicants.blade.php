@@ -23,7 +23,7 @@
                     <th class="px-5 py-3">Candidate</th>
                     <th class="px-5 py-3">Applied</th>
                     <th class="px-5 py-3">Status</th>
-                    <th class="px-5 py-3 text-right">Update status</th>
+                    <th class="px-5 py-3 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,27 +32,48 @@
                         <td class="px-5 py-3 font-semibold">{{ $application->candidate->user->name }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $application->applied_date->format('d M Y') }}</td>
                         <td class="px-5 py-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full
-                                @if($application->status === 'pending') bg-amber-50 text-amber-700
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full
+                                @if ($application->status === 'pending') bg-amber-50 text-amber-700
                                 @elseif($application->status === 'shortlisted') bg-violet-50 text-violet-700
                                 @elseif($application->status === 'selected') bg-green-50 text-green-700
-                                @else bg-red-50 text-red-700
-                                @endif">
+                                @else bg-red-50 text-red-700 @endif">
                                 {{ ucfirst($application->status) }}
                             </span>
                         </td>
                         <td class="px-5 py-3 text-right">
-                            <form method="POST" action="{{ route('applications.update-status', $application) }}" class="inline-flex items-center gap-2">
-                                @csrf
-                                @method('PATCH')
-                                <select name="status" onchange="this.form.submit()"
-                                    class="text-xs border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500">
-                                    <option value="pending" {{ $application->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="shortlisted" {{ $application->status === 'shortlisted' ? 'selected' : '' }}>Shortlisted</option>
-                                    <option value="selected" {{ $application->status === 'selected' ? 'selected' : '' }}>Selected</option>
-                                    <option value="rejected" {{ $application->status === 'rejected' ? 'selected' : '' }}>Rejected</option>
-                                </select>
-                            </form>
+                            <div class="flex items-center justify-end gap-3">
+                                <form method="POST" action="{{ route('applications.update-status', $application) }}"
+                                    class="inline-flex items-center gap-2">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" onchange="this.form.submit()"
+                                        class="text-xs border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500">
+                                        <option value="pending" {{ $application->status === 'pending' ? 'selected' : '' }}>
+                                            Pending</option>
+                                        <option value="shortlisted"
+                                            {{ $application->status === 'shortlisted' ? 'selected' : '' }}>Shortlisted
+                                        </option>
+                                        <option value="selected"
+                                            {{ $application->status === 'selected' ? 'selected' : '' }}>Selected</option>
+                                        <option value="rejected"
+                                            {{ $application->status === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                    </select>
+                                </form>
+
+                                @if (in_array($application->status, ['shortlisted', 'selected']))
+                                    @if ($application->interview)
+                                        <span class="text-xs font-semibold text-green-600">
+                                            <i class="fas fa-check-circle"></i> Interview set
+                                        </span>
+                                    @else
+                                        <a href="{{ route('interviews.create', $application) }}"
+                                            class="text-xs font-semibold text-blue-600">
+                                            Schedule interview
+                                        </a>
+                                    @endif
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @empty

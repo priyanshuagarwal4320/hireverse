@@ -19,6 +19,10 @@ class Interview extends Model
         'meeting_link',
     ];
 
+    protected $casts = [
+        'interview_date' => 'date',
+    ];
+
     public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class);

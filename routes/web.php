@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\InterviewController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,11 +60,20 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::patch('/applications/{application}/status', [ApplicationController::class, 'updateStatus'])
         ->name('applications.update-status');
+
+    Route::get('/applications/{application}/interview/create', [InterviewController::class, 'create'])
+        ->name('interviews.create');
+
+    Route::post('/applications/{application}/interview', [InterviewController::class, 'store'])
+        ->name('interviews.store');
 });
 
 Route::middleware(['auth', 'role:candidate'])->group(function () {
     Route::post('/jobs/{job}/apply', [ApplicationController::class, 'store'])
         ->name('applications.store');
+
+    Route::get('/candidate/interviews', [InterviewController::class, 'index'])
+        ->name('candidate.interviews');
 });
 
 Route::middleware('auth')->group(function () {
