@@ -24,6 +24,10 @@ class Candidate extends Model
         'city',
     ];
 
+    protected $casts = [
+        'dob' => 'date',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

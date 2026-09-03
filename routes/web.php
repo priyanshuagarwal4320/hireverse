@@ -8,6 +8,7 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\CandidateProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -84,6 +85,15 @@ Route::middleware(['auth', 'role:candidate'])->group(function () {
 
     Route::get('/candidate/results', [ResultController::class, 'index'])
         ->name('candidate.results');
+
+    Route::get('/candidate/profile', [CandidateProfileController::class, 'edit'])
+        ->name('candidate.profile.edit');
+
+    Route::put('/candidate/profile', [CandidateProfileController::class, 'update'])
+        ->name('candidate.profile.update');
+
+    Route::get('/candidate/applications', [ApplicationController::class, 'index'])
+        ->name('candidate.applications');
 });
 
 Route::middleware('auth')->group(function () {

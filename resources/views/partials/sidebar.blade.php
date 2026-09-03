@@ -12,45 +12,60 @@
     <nav class="p-4 space-y-1">
         @if (auth()->user()->role === 'admin')
             <a href="{{ route('admin.dashboard') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Dashboard</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-gauge-high w-4 text-center"></i> Dashboard
+            </a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">Platform</p>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Companies</a>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Candidates</a>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Jobs</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">
+                <i class="fas fa-building w-4 text-center"></i> Companies
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">
+                <i class="fas fa-users w-4 text-center"></i> Candidates
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">
+                <i class="fas fa-briefcase w-4 text-center"></i> Jobs
+            </a>
         @elseif(auth()->user()->role === 'company')
             <a href="{{ route('company.dashboard') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Dashboard</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('company.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-gauge-high w-4 text-center"></i> Dashboard
+            </a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">Recruitment</p>
             <a href="{{ route('company.profile.edit') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Company
-                profile</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('company.profile.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-building w-4 text-center"></i> Company profile
+            </a>
             <a href="{{ route('company.jobs.index') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">My
-                jobs</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('company.jobs.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-briefcase w-4 text-center"></i> My jobs
+            </a>
         @else
             <a href="{{ route('candidate.dashboard') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-violet-50 text-violet-700">Browse
-                jobs</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-magnifying-glass w-4 text-center"></i> Browse jobs
+            </a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">My account</p>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">My
-                profile</a>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">My
-                applications</a>
+            <a href="{{ route('candidate.profile.edit') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.profile.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-user w-4 text-center"></i> My profile
+            </a>
+            <a href="{{ route('candidate.applications') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.applications') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-file-lines w-4 text-center"></i> My applications
+            </a>
             <a href="{{ route('candidate.interviews') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Interviews</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.interviews') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-calendar-check w-4 text-center"></i> Interviews
+            </a>
             <a href="{{ route('candidate.results') }}"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">Results</a>
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.results') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-chart-simple w-4 text-center"></i> Results
+            </a>
         @endif
     </nav>
 
     <div class="mt-6 mx-4 p-3 rounded-xl bg-gray-50 flex items-center gap-3">
-        <div
-            class="w-8 h-8 rounded-lg bg-violet-600 text-white flex items-center justify-center text-xs font-extrabold flex-shrink-0">
+        <div class="w-8 h-8 rounded-lg bg-violet-600 text-white flex items-center justify-center text-xs font-extrabold flex-shrink-0">
             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
         </div>
         <div>

@@ -6,9 +6,20 @@ use App\Models\JobPost;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Application;
+use Illuminate\View\View;
 
 class ApplicationController extends Controller
 {
+    public function index(): View
+{
+    $candidate = auth()->user()->candidate;
+
+    $applications = $candidate
+        ? $candidate->applications()->with('jobPost.company')->latest()->paginate(10)
+        : collect();
+
+    return view('candidate.applications', compact('applications'));
+}
     public function store(JobPost $job): RedirectResponse
     {
         $candidate = auth()->user()->candidate;
