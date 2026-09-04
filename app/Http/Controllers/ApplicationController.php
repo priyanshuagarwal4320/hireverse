@@ -11,15 +11,29 @@ use Illuminate\View\View;
 class ApplicationController extends Controller
 {
     public function index(): View
-{
-    $candidate = auth()->user()->candidate;
+    {
+        $candidate = auth()->user()->candidate;
 
-    $applications = $candidate
-        ? $candidate->applications()->with('jobPost.company')->latest()->paginate(10)
-        : collect();
+        $applications = $candidate
+            ? $candidate->applications()->with('jobPost.company')->latest()->paginate(10)
+            : collect();
 
-    return view('candidate.applications', compact('applications'));
-}
+        return view('candidate.applications', compact('applications'));
+    }
+
+    public function companyIndex(): View
+    {
+        $company = auth()->user()->company;
+
+        $jobIds = $company->jobPosts()->pluck('id');
+
+        $applications = Application::whereIn('job_post_id', $jobIds)
+            ->with(['candidate.user', 'jobPost'])
+            ->latest()
+            ->paginate(15);
+
+        return view('company.applications', compact('applications'));
+    }
     public function store(JobPost $job): RedirectResponse
     {
         $candidate = auth()->user()->candidate;

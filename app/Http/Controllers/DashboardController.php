@@ -60,8 +60,9 @@ class DashboardController extends Controller
             $query->whereIn('job_post_id', $jobIds);
         })
             ->where('interview_date', '>=', now()->toDateString())
-            ->with('application.candidate.user')
+            ->with('application.candidate.user', 'application.jobPost')
             ->orderBy('interview_date')
+            ->orderBy('interview_time')
             ->take(5)
             ->get();
 

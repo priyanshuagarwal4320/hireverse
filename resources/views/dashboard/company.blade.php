@@ -129,6 +129,7 @@
             <thead>
                 <tr class="text-left text-xs text-gray-400 uppercase font-bold bg-gray-50">
                     <th class="px-5 py-3">Candidate</th>
+                    <th class="px-5 py-3">Job</th>
                     <th class="px-5 py-3">Date</th>
                     <th class="px-5 py-3">Time</th>
                     <th class="px-5 py-3">Mode</th>
@@ -138,6 +139,7 @@
                 @forelse($upcomingInterviews as $interview)
                     <tr class="border-t border-gray-100">
                         <td class="px-5 py-3 font-semibold">{{ $interview->application->candidate->user->name }}</td>
+                        <td class="px-5 py-3">{{ $interview->application->jobPost->job_title }}</td>
                         <td class="px-5 py-3">{{ $interview->interview_date->format('d M Y') }}</td>
                         <td class="px-5 py-3">{{ \Carbon\Carbon::parse($interview->interview_time)->format('h:i A') }}</td>
                         <td class="px-5 py-3">

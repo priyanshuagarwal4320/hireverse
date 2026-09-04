@@ -33,10 +33,43 @@ class ResultController extends Controller
 
         $interview->result()->create($validated);
 
+        $interview->application->update([
+            'status' => $validated['status'] === 'pass' ? 'selected' : 'rejected',
+        ]);
+
         return redirect()->route('company.jobs.applicants', $interview->application->job_post_id)
             ->with('status', 'Result recorded successfully.');
     }
 
+    public function edit(Interview $interview): View
+    {
+        $companyId = $interview->application->jobPost->company_id;
+
+        abort_if($companyId !== auth()->user()->company->id, 403);
+
+        return view('company.results.edit', compact('interview'));
+    }
+
+    public function update(Request $request, Interview $interview): RedirectResponse
+    {
+        $companyId = $interview->application->jobPost->company_id;
+
+        abort_if($companyId !== auth()->user()->company->id, 403);
+
+        $validated = $request->validate([
+            'score' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'remarks' => ['nullable', 'string', 'max:1000'],
+            'status' => ['required', 'in:pass,fail'],
+        ]);
+
+        $interview->result()->update($validated);
+
+        $interview->application->update([
+            'status' => $validated['status'] === 'pass' ? 'selected' : 'rejected',
+        ]);
+
+        return redirect()->route('company.interviews')->with('status', 'Result updated successfully.');
+    }
     public function index(): View
     {
         $candidate = auth()->user()->candidate;

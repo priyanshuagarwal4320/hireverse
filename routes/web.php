@@ -74,6 +74,18 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::post('/interviews/{interview}/result', [ResultController::class, 'store'])
         ->name('results.store');
+
+    Route::get('/interviews/{interview}/result/edit', [ResultController::class, 'edit'])
+        ->name('results.edit');
+
+    Route::put('/interviews/{interview}/result', [ResultController::class, 'update'])
+        ->name('results.update');
+
+    Route::get('/company/applications', [ApplicationController::class, 'companyIndex'])
+        ->name('company.applications');
+
+    Route::get('/company/interviews', [InterviewController::class, 'companyIndex'])
+        ->name('company.interviews');
 });
 
 Route::middleware(['auth', 'role:candidate'])->group(function () {

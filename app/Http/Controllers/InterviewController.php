@@ -50,4 +50,20 @@ class InterviewController extends Controller
 
         return view('candidate.interviews', compact('interviews'));
     }
+
+    public function companyIndex(): View
+    {
+        $company = auth()->user()->company;
+
+        $jobIds = $company->jobPosts()->pluck('id');
+
+        $interviews = Interview::whereHas('application', function ($query) use ($jobIds) {
+            $query->whereIn('job_post_id', $jobIds);
+        })
+            ->with('application.candidate.user', 'application.jobPost')
+            ->orderBy('interview_date')
+            ->paginate(15);
+
+        return view('company.interviews.index', compact('interviews'));
+    }
 }
