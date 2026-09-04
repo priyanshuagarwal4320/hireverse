@@ -7,6 +7,7 @@ use App\Models\Application;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\JobPost;
+use App\Models\Interview;
 
 
 class DashboardController extends Controller
@@ -38,16 +39,42 @@ class DashboardController extends Controller
         $totalJobs = $company->jobPosts()->count();
         $openJobs = $company->jobPosts()->where('status', 'open')->count();
 
-        $totalApplicants = Application::whereIn('job_post_id', $company->jobPosts()->pluck('id'))->count();
+        $jobIds = $company->jobPosts()->pluck('id');
+
+        $totalApplicants = Application::whereIn('job_post_id', $jobIds)->count();
+        $shortlistedCount = Application::whereIn('job_post_id', $jobIds)->where('status', 'shortlisted')->count();
+
+        $interviewsSetCount = Interview::whereHas('application', function ($query) use ($jobIds) {
+            $query->whereIn('job_post_id', $jobIds);
+        })->count();
 
         $recentJobs = $company->jobPosts()->latest()->take(5)->get();
+
+        $recentApplicants = Application::whereIn('job_post_id', $jobIds)
+            ->with(['candidate.user', 'jobPost'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $upcomingInterviews = Interview::whereHas('application', function ($query) use ($jobIds) {
+            $query->whereIn('job_post_id', $jobIds);
+        })
+            ->where('interview_date', '>=', now()->toDateString())
+            ->with('application.candidate.user')
+            ->orderBy('interview_date')
+            ->take(5)
+            ->get();
 
         return view('dashboard.company', compact(
             'company',
             'totalJobs',
             'openJobs',
             'totalApplicants',
-            'recentJobs'
+            'shortlistedCount',
+            'interviewsSetCount',
+            'recentJobs',
+            'recentApplicants',
+            'upcomingInterviews'
         ));
     }
 
