@@ -17,17 +17,29 @@
                 <i class="fas fa-gauge-high w-4 text-center"></i> Dashboard
             </a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">Platform</p>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">
+            <a href="{{ route('admin.companies.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.companies.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-building w-4 text-center"></i> Companies
             </a>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">
+            <a href="{{ route('admin.candidates.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.candidates.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-users w-4 text-center"></i> Candidates
             </a>
-            <a href="#"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50">
+            <a href="{{ route('admin.jobs.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.jobs.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-briefcase w-4 text-center"></i> Jobs
+            </a>
+            <a href="{{ route('admin.applications.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.applications.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-file-lines w-4 text-center"></i> Applications
+            </a>
+            <a href="{{ route('admin.interviews.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.interviews.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-calendar-check w-4 text-center"></i> Interviews
+            </a>
+            <a href="{{ route('admin.results.index') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('admin.results.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-chart-simple w-4 text-center"></i> Results
             </a>
         @elseif(auth()->user()->role === 'company')
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pb-1">Main</p>

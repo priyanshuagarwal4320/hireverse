@@ -9,6 +9,12 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\CandidateProfileController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
+use App\Http\Controllers\Admin\CandidateController as AdminCandidateController;
+use App\Http\Controllers\Admin\JobController as AdminJobController;
+use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
+use App\Http\Controllers\Admin\InterviewController as AdminInterviewController;
+use App\Http\Controllers\Admin\ResultController as AdminResultController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +36,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/candidate/dashboard', [DashboardController::class, 'candidate'])
         ->middleware('role:candidate')
         ->name('candidate.dashboard');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/companies', [AdminCompanyController::class, 'index'])
+        ->name('admin.companies.index');
+
+    Route::get('/admin/candidates', [AdminCandidateController::class, 'index'])
+        ->name('admin.candidates.index');
+
+    Route::get('/admin/jobs', [AdminJobController::class, 'index'])
+        ->name('admin.jobs.index');
+
+    Route::get('/admin/applications', [AdminApplicationController::class, 'index'])
+        ->name('admin.applications.index');
+
+    Route::get('/admin/interviews', [AdminInterviewController::class, 'index'])
+        ->name('admin.interviews.index');
+
+    Route::get('/admin/results', [AdminResultController::class, 'index'])
+        ->name('admin.results.index');
 });
 
 Route::middleware(['auth', 'role:company'])->group(function () {
