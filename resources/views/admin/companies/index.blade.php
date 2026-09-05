@@ -16,6 +16,7 @@
                     <th class="px-5 py-3">Industry</th>
                     <th class="px-5 py-3">Jobs posted</th>
                     <th class="px-5 py-3">Joined</th>
+                    <th class="px-5 py-3 text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,14 @@
                         <td class="px-5 py-3 text-gray-500">{{ $company->industry ?: '—' }}</td>
                         <td class="px-5 py-3">{{ $company->job_posts_count }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $company->created_at->format('d M Y') }}</td>
+                        <td class="px-5 py-3 text-right">
+                            <form method="POST" action="{{ route('admin.companies.destroy', $company) }}"
+                                onsubmit="return confirm('This will permanently delete this company and all its jobs, applications, interviews, and results. Continue?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs font-semibold text-red-600">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>

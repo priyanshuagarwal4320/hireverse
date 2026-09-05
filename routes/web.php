@@ -50,14 +50,26 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/companies', [AdminCompanyController::class, 'index'])
         ->name('admin.companies.index');
 
+    Route::delete('/admin/companies/{company}', [AdminCompanyController::class, 'destroy'])
+        ->name('admin.companies.destroy');
+
     Route::get('/admin/candidates', [AdminCandidateController::class, 'index'])
         ->name('admin.candidates.index');
+
+    Route::delete('/admin/candidates/{candidate}', [AdminCandidateController::class, 'destroy'])
+        ->name('admin.candidates.destroy');
 
     Route::get('/admin/jobs', [AdminJobController::class, 'index'])
         ->name('admin.jobs.index');
 
+    Route::delete('/admin/jobs/{job}', [AdminJobController::class, 'destroy'])
+        ->name('admin.jobs.destroy');
+
     Route::get('/admin/applications', [AdminApplicationController::class, 'index'])
         ->name('admin.applications.index');
+
+    Route::delete('/admin/applications/{application}', [AdminApplicationController::class, 'destroy'])
+        ->name('admin.applications.destroy');
 
     Route::get('/admin/interviews', [AdminInterviewController::class, 'index'])
         ->name('admin.interviews.index');

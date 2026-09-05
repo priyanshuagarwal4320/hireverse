@@ -16,6 +16,7 @@
                     <th class="px-5 py-3">Company</th>
                     <th class="px-5 py-3">Applied</th>
                     <th class="px-5 py-3">Status</th>
+                    <th class="px-5 py-3 text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,14 +27,22 @@
                         <td class="px-5 py-3 text-gray-500">{{ $application->jobPost->company->company_name }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $application->applied_date->format('d M Y') }}</td>
                         <td class="px-5 py-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full
-                                @if($application->status === 'pending') bg-amber-50 text-amber-700
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full
+                                @if ($application->status === 'pending') bg-amber-50 text-amber-700
                                 @elseif($application->status === 'shortlisted') bg-violet-50 text-violet-700
                                 @elseif($application->status === 'selected') bg-green-50 text-green-700
-                                @else bg-red-50 text-red-700
-                                @endif">
+                                @else bg-red-50 text-red-700 @endif">
                                 {{ ucfirst($application->status) }}
                             </span>
+                        </td>
+                        <td class="px-5 py-3 text-right">
+                            <form method="POST" action="{{ route('admin.applications.destroy', $application) }}"
+                                onsubmit="return confirm('This will permanently delete this application and its interview/result if any. Continue?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs font-semibold text-red-600">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @empty

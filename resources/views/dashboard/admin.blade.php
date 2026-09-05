@@ -44,7 +44,7 @@
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm mb-6 overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-sm font-bold">Recent jobs</h3>
-            <a href="#" class="text-xs font-bold text-violet-600">View all</a>
+            <a href="{{ route('admin.jobs.index') }}" class="text-xs font-bold text-violet-600">View all</a>
         </div>
         <table class="w-full text-sm">
             <thead>
@@ -82,7 +82,7 @@
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-sm font-bold">Recent applications</h3>
-            <a href="#" class="text-xs font-bold text-violet-600">View all</a>
+            <a href="{{ route('admin.applications.index') }}" class="text-xs font-bold text-violet-600">View all</a>
         </div>
         <table class="w-full text-sm">
             <thead>

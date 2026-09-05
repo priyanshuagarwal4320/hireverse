@@ -16,6 +16,7 @@
                     <th class="px-5 py-3">City</th>
                     <th class="px-5 py-3">Applications</th>
                     <th class="px-5 py-3">Joined</th>
+                    <th class="px-5 py-3 text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,13 @@
                         <td class="px-5 py-3 text-gray-500">{{ $candidate->city ?: '—' }}</td>
                         <td class="px-5 py-3">{{ $candidate->applications_count }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $candidate->created_at->format('d M Y') }}</td>
+                        <td class="px-5 py-3 text-right">
+                            <form method="POST" action="{{ route('admin.candidates.destroy', $candidate) }}"
+                                onsubmit="return confirm('This will permanently delete this candidate and all their applications, interviews, and results. Continue?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs font-semibold text-red-600">Delete</button>
+                            </form>
                     </tr>
                 @empty
                     <tr>

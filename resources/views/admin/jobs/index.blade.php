@@ -16,6 +16,7 @@
                     <th class="px-5 py-3">Location</th>
                     <th class="px-5 py-3">Applications</th>
                     <th class="px-5 py-3">Status</th>
+                    <th class="px-5 py-3 text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,10 +27,19 @@
                         <td class="px-5 py-3 text-gray-500">{{ $job->location ?: '—' }}</td>
                         <td class="px-5 py-3">{{ $job->applications_count }}</td>
                         <td class="px-5 py-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full
                                 {{ $job->status === 'open' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' }}">
                                 {{ ucfirst($job->status) }}
                             </span>
+                        </td>
+                        <td class="px-5 py-3 text-right">
+                            <form method="POST" action="{{ route('admin.jobs.destroy', $job) }}"
+                                onsubmit="return confirm('This will permanently delete this job post and all its applications, interviews, and results. Continue?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs font-semibold text-red-600">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @empty
