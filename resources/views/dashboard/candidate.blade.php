@@ -12,6 +12,29 @@
     <h1 class="text-xl font-extrabold mb-1">Browse jobs</h1>
     <p class="text-gray-500 text-sm mb-6">Matched to your profile and skills</p>
 
+    <form method="GET" action="{{ route('candidate.dashboard') }}" class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 mb-6 flex flex-col sm:flex-row gap-3">
+        <div class="flex-1 relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                <i class="fas fa-search"></i>
+            </span>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by job title or location..."
+                class="block w-full pl-9 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+        </div>
+        <select name="job_type" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+            <option value="">All types</option>
+            <option value="full_time" {{ request('job_type') === 'full_time' ? 'selected' : '' }}>Full time</option>
+            <option value="part_time" {{ request('job_type') === 'part_time' ? 'selected' : '' }}>Part time</option>
+            <option value="contract" {{ request('job_type') === 'contract' ? 'selected' : '' }}>Contract</option>
+            <option value="internship" {{ request('job_type') === 'internship' ? 'selected' : '' }}>Internship</option>
+        </select>
+        <button type="submit" class="text-xs font-bold px-5 py-2 rounded-lg text-white" style="background:#171a2e;">
+            Search
+        </button>
+        @if(request('search') || request('job_type'))
+            <a href="{{ route('candidate.dashboard') }}" class="text-xs font-semibold text-gray-400 self-center">Clear</a>
+        @endif
+    </form>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {{-- Left: job listings --}}
@@ -40,7 +63,7 @@
                 </div>
             @empty
                 <div class="bg-white border border-gray-200 rounded-2xl p-8 text-center text-gray-400 text-sm">
-                    No open jobs right now. Check back soon.
+                    No jobs found matching your search.
                 </div>
             @endforelse
         </div>

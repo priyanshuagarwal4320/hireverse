@@ -81,16 +81,29 @@ class DashboardController extends Controller
         ));
     }
 
-    public function candidate()
-    {
-        $candidate = auth()->user()->candidate;
+    public function candidate(Request $request)
+{
+    $candidate = auth()->user()->candidate;
 
-        $openJobs = JobPost::where('status', 'open')->with('company')->latest()->take(10)->get();
+    $openJobs = JobPost::where('status', 'open')
+        ->when($request->search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('job_title', 'like', "%{$search}%")
+                  ->orWhere('location', 'like', "%{$search}%");
+            });
+        })
+        ->when($request->job_type, function ($query, $type) {
+            $query->where('job_type', $type);
+        })
+        ->with('company')
+        ->latest()
+        ->take(10)
+        ->get();
 
-        $myApplications = $candidate
-            ? $candidate->applications()->with('jobPost')->latest()->get()
-            : collect();
+    $myApplications = $candidate
+        ? $candidate->applications()->with('jobPost')->latest()->get()
+        : collect();
 
-        return view('dashboard.candidate', compact('openJobs', 'myApplications'));
-    }
+    return view('dashboard.candidate', compact('openJobs', 'myApplications'));
+}
 }
