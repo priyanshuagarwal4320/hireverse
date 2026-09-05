@@ -17,7 +17,15 @@ use App\Http\Controllers\Admin\InterviewController as AdminInterviewController;
 use App\Http\Controllers\Admin\ResultController as AdminResultController;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return match (auth()->user()->role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'company' => redirect()->route('company.dashboard'),
+            'candidate' => redirect()->route('candidate.dashboard'),
+        };
+    }
+
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
