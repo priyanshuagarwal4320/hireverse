@@ -46,7 +46,9 @@ class DashboardController extends Controller
 
         $interviewsSetCount = Interview::whereHas('application', function ($query) use ($jobIds) {
             $query->whereIn('job_post_id', $jobIds);
-        })->count();
+        })
+            ->where('interview_date', '>=', now()->toDateString())
+            ->count();
 
         $recentJobs = $company->jobPosts()->latest()->take(5)->get();
 
