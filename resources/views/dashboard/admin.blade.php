@@ -118,5 +118,45 @@
             </tbody>
         </table>
     </div>
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 mt-6">
+        <h3 class="text-sm font-bold mb-4">Applications trend (last 6 months)</h3>
+        <canvas id="applicationsChart" height="80"></canvas>
+    </div>
 
+    @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+        <script>
+            const ctx = document.getElementById('applicationsChart');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode($applicationsPerMonth->keys()) !!},
+                    datasets: [{
+                        label: 'Applications',
+                        data: {!! json_encode($applicationsPerMonth->values()) !!},
+                        borderColor: '#6c5ce7',
+                        backgroundColor: 'rgba(108, 92, 231, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endpush
 @endsection

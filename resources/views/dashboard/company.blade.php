@@ -157,5 +157,42 @@
             </tbody>
         </table>
     </div>
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 mt-6">
+        <h3 class="text-sm font-bold mb-4">Applications by status</h3>
+        <div style="max-width: 280px; margin: 0 auto;">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
 
+    @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+        <script>
+            const statusCtx = document.getElementById('statusChart');
+            new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: {!! json_encode($statusBreakdown->keys()->map(fn($s) => ucfirst($s))) !!},
+                    datasets: [{
+                        data: {!! json_encode($statusBreakdown->values()) !!},
+                        backgroundColor: ['#c07a1e', '#6c5ce7', '#1e8a58', '#c0392b'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 11
+                                },
+                                boxWidth: 12
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endpush
 @endsection

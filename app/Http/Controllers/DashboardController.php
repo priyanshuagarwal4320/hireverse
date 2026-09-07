@@ -21,6 +21,11 @@ class DashboardController extends Controller
 
         $recentJobs = JobPost::with('company')->latest()->take(5)->get();
         $recentApplications = Application::with(['candidate.user', 'jobPost'])->latest()->take(5)->get();
+        $applicationsPerMonth = Application::selectRaw('DATE_FORMAT(created_at, "%b %Y") as month, COUNT(*) as total')
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderByRaw('MIN(created_at)')
+            ->pluck('total', 'month');
 
         return view('dashboard.admin', compact(
             'totalCompanies',
@@ -28,7 +33,8 @@ class DashboardController extends Controller
             'openJobs',
             'totalApplications',
             'recentJobs',
-            'recentApplications'
+            'recentApplications',
+            'applicationsPerMonth'
         ));
     }
 
@@ -68,6 +74,11 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $statusBreakdown = Application::whereIn('job_post_id', $jobIds)
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
         return view('dashboard.company', compact(
             'company',
             'totalJobs',
@@ -77,33 +88,34 @@ class DashboardController extends Controller
             'interviewsSetCount',
             'recentJobs',
             'recentApplicants',
-            'upcomingInterviews'
+            'upcomingInterviews',
+            'statusBreakdown'
         ));
     }
 
     public function candidate(Request $request)
-{
-    $candidate = auth()->user()->candidate;
+    {
+        $candidate = auth()->user()->candidate;
 
-    $openJobs = JobPost::where('status', 'open')
-        ->when($request->search, function ($query, $search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('job_title', 'like', "%{$search}%")
-                  ->orWhere('location', 'like', "%{$search}%");
-            });
-        })
-        ->when($request->job_type, function ($query, $type) {
-            $query->where('job_type', $type);
-        })
-        ->with('company')
-        ->latest()
-        ->take(10)
-        ->get();
+        $openJobs = JobPost::where('status', 'open')
+            ->when($request->search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('job_title', 'like', "%{$search}%")
+                        ->orWhere('location', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->job_type, function ($query, $type) {
+                $query->where('job_type', $type);
+            })
+            ->with('company')
+            ->latest()
+            ->take(10)
+            ->get();
 
-    $myApplications = $candidate
-        ? $candidate->applications()->with('jobPost')->latest()->get()
-        : collect();
+        $myApplications = $candidate
+            ? $candidate->applications()->with('jobPost')->latest()->get()
+            : collect();
 
-    return view('dashboard.candidate', compact('openJobs', 'myApplications'));
-}
+        return view('dashboard.candidate', compact('openJobs', 'myApplications'));
+    }
 }
