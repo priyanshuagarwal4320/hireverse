@@ -29,7 +29,12 @@
             <tbody>
                 @forelse($applications as $application)
                     <tr class="border-t border-gray-100">
-                        <td class="px-5 py-3 font-semibold">{{ $application->candidate->user->name }}</td>
+                        <td class="px-5 py-3 font-semibold">
+                            <a href="{{ route('applications.show', $application) }}"
+                                class="text-violet-600 hover:underline">
+                                {{ $application->candidate->user->name }}
+                            </a>
+                        </td>
                         <td class="px-5 py-3 text-gray-500">{{ $application->applied_date->format('d M Y') }}</td>
                         <td class="px-5 py-3">
                             <span
@@ -68,7 +73,8 @@
                                         </span>
                                         @if ($application->interview->result)
                                             <span class="text-xs font-semibold text-violet-600">
-                                                <i class="fas fa-poll"></i> Result: {{ ucfirst($application->interview->result->status) }}
+                                                <i class="fas fa-poll"></i> Result:
+                                                {{ ucfirst($application->interview->result->status) }}
                                             </span>
                                         @else
                                             <a href="{{ route('results.create', $application->interview) }}"

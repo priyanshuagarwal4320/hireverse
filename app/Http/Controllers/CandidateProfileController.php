@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\Candidate;
 
 class CandidateProfileController extends Controller
 {
@@ -16,31 +17,46 @@ class CandidateProfileController extends Controller
     }
 
     public function update(Request $request): RedirectResponse
-{
-    $candidate = auth()->user()->candidate;
+    {
+        $candidate = auth()->user()->candidate;
 
-    $validated = $request->validate([
-        'mobile' => ['nullable', 'string', 'max:20'],
-        'dob' => ['nullable', 'date', 'before:today'],
-        'gender' => ['nullable', 'in:male,female,other'],
-        'qualification' => ['nullable', 'string', 'max:255'],
-        'experience' => ['nullable', 'string', 'max:255'],
-        'skills' => ['nullable', 'string', 'max:500'],
-        'city' => ['nullable', 'string', 'max:255'],
-        'profile_photo' => ['nullable', 'image', 'max:2048'],
-        'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
-    ]);
+        $validated = $request->validate([
+            'mobile' => ['nullable', 'string', 'max:20'],
+            'dob' => ['nullable', 'date', 'before:today'],
+            'gender' => ['nullable', 'in:male,female,other'],
+            'qualification' => ['nullable', 'string', 'max:255'],
+            'experience' => ['nullable', 'string', 'max:255'],
+            'skills' => ['nullable', 'string', 'max:500'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'profile_photo' => ['nullable', 'image', 'max:2048'],
+            'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
+        ]);
 
-    if ($request->hasFile('profile_photo')) {
-        $validated['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+        if ($request->hasFile('profile_photo')) {
+            $validated['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+        }
+
+        if ($request->hasFile('resume')) {
+            $validated['resume'] = $request->file('resume')->store('resumes', 'public');
+        }
+
+        $candidate->update($validated);
+
+        return redirect()->route('candidate.profile.edit')->with('status', 'Profile updated successfully.');
     }
+    public function downloadResume(Candidate $candidate)
+    {
+        $isOwner = auth()->user()->candidate?->id === $candidate->id;
+        $isReviewingCompany = auth()->user()->role === 'company'
+            && $candidate->applications()->whereIn('job_post_id', auth()->user()->company->jobPosts()->pluck('id'))->exists();
+        $isAdmin = auth()->user()->role === 'admin';
 
-    if ($request->hasFile('resume')) {
-        $validated['resume'] = $request->file('resume')->store('resumes', 'public');
+        abort_if(!$isOwner && !$isReviewingCompany && !$isAdmin, 403);
+
+        abort_if(!$candidate->resume, 404);
+
+        $filename = str_replace(' ', '_', $candidate->user->name) . '_Resume.' . pathinfo($candidate->resume, PATHINFO_EXTENSION);
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->download($candidate->resume, $filename);
     }
-
-    $candidate->update($validated);
-
-    return redirect()->route('candidate.profile.edit')->with('status', 'Profile updated successfully.');
-}
 }

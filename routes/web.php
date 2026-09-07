@@ -44,6 +44,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/candidate/dashboard', [DashboardController::class, 'candidate'])
         ->middleware('role:candidate')
         ->name('candidate.dashboard');
+
+    Route::get('/candidates/{candidate}/resume', [CandidateProfileController::class, 'downloadResume'])
+        ->name('candidate.resume.download')
+        ->middleware('auth');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -108,6 +112,9 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 
     Route::patch('/applications/{application}/status', [ApplicationController::class, 'updateStatus'])
         ->name('applications.update-status');
+
+    Route::get('/applications/{application}', [ApplicationController::class, 'show'])
+        ->name('applications.show');
 
     Route::get('/applications/{application}/interview/create', [InterviewController::class, 'create'])
         ->name('interviews.create');

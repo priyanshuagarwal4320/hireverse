@@ -65,4 +65,15 @@ class ApplicationController extends Controller
 
         return back()->with('status', 'Application status updated.');
     }
+
+    public function show(Application $application): View
+    {
+        $companyId = $application->jobPost->company_id;
+
+        abort_if($companyId !== auth()->user()->company->id, 403);
+
+        $application->load('candidate.user', 'jobPost', 'interview.result');
+
+        return view('company.applications.show', compact('application'));
+    }
 }
