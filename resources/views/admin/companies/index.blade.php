@@ -7,6 +7,17 @@
     <h1 class="text-xl font-extrabold mb-1">Companies</h1>
     <p class="text-gray-500 text-sm mb-6">All registered companies on the platform</p>
 
+    <form method="GET" action="{{ route('admin.companies.index') }}" class="mb-4">
+    <div class="relative max-w-sm">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+            <i class="fas fa-search"></i>
+        </span>
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search companies..."
+    onkeyup="clearTimeout(window.searchTimeout); window.searchTimeout = setTimeout(() => this.form.submit(), 500);"
+    class="block w-full pl-9 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+    </div>
+</form>
+
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
         <table class="w-full text-sm">
             <thead>
