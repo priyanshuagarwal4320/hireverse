@@ -18,9 +18,10 @@
                     <p class="text-sm font-extrabold text-violet-600">{{ $completeness }}%</p>
                 </div>
                 <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div class="h-full bg-violet-600 rounded-full transition-all duration-500" style="width: {{ $completeness }}%"></div>
+                    <div class="h-full bg-violet-600 rounded-full transition-all duration-500"
+                        style="width: {{ $completeness }}%"></div>
                 </div>
-                @if($completeness < 100)
+                @if ($completeness < 100)
                     <p class="text-xs text-gray-400 mt-2">Complete your profile to appear more credible to candidates.</p>
                 @endif
             </div>
@@ -31,7 +32,8 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('company.profile.update') }}" class="space-y-6">
+            <form method="POST" action="{{ route('company.profile.update') }}" class="space-y-6"
+                enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -46,6 +48,23 @@
                         </div>
                     </div>
                     <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="sm:col-span-2 flex items-center gap-4 mb-2">
+                            @if ($company->logo)
+                                <img src="{{ asset('storage/' . $company->logo) }}"
+                                    class="w-16 h-16 rounded-xl object-cover border border-gray-200">
+                            @else
+                                <div
+                                    class="w-16 h-16 rounded-xl bg-violet-600 text-white flex items-center justify-center font-extrabold text-xl">
+                                    {{ strtoupper(substr($company->company_name ?? 'C', 0, 1)) }}
+                                </div>
+                            @endif
+                            <div class="flex-1">
+                                <x-input-label for="logo" :value="__('Company logo')" />
+                                <input id="logo" name="logo" type="file" accept="image/*"
+                                    class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700" />
+                                <x-input-error :messages="$errors->get('logo')" class="mt-2" />
+                            </div>
+                        </div>
                         <div class="sm:col-span-2">
                             <x-input-label for="company_name" :value="__('Company name')" />
                             <x-text-input id="company_name" name="company_name" type="text" class="block mt-1 w-full"
@@ -55,8 +74,7 @@
                         <div>
                             <x-input-label for="industry" :value="__('Industry')" />
                             <x-text-input id="industry" name="industry" type="text" class="block mt-1 w-full"
-                                placeholder="e.g. Software / IT Services"
-                                :value="old('industry', $company->industry)" />
+                                placeholder="e.g. Software / IT Services" :value="old('industry', $company->industry)" />
                             <x-input-error :messages="$errors->get('industry')" class="mt-2" />
                         </div>
                         <div>
@@ -82,8 +100,7 @@
                         <div>
                             <x-input-label for="website" :value="__('Website')" />
                             <x-text-input id="website" name="website" type="text" class="block mt-1 w-full"
-                                placeholder="https://example.com"
-                                :value="old('website', $company->website)" />
+                                placeholder="https://example.com" :value="old('website', $company->website)" />
                             <x-input-error :messages="$errors->get('website')" class="mt-2" />
                         </div>
                         <div>
@@ -133,49 +150,64 @@
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">How candidates see you</p>
                     </div>
                     <div class="p-5">
-                        <div class="w-12 h-12 rounded-xl bg-violet-600 text-white flex items-center justify-center font-extrabold text-lg mb-3">
-                            {{ strtoupper(substr($company->company_name ?? 'C', 0, 1)) }}
+                        <div class="p-5">
+                            @if ($company->logo)
+                                <img src="{{ asset('storage/' . $company->logo) }}"
+                                    class="w-12 h-12 rounded-xl object-cover mb-3">
+                            @else
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-violet-600 text-white flex items-center justify-center font-extrabold text-lg mb-3">
+                                    {{ strtoupper(substr($company->company_name ?? 'C', 0, 1)) }}
+                                </div>
+                            @endif
+                            <p class="font-bold text-sm mb-1">{{ $company->company_name ?: 'Your company name' }}</p>
+                            <p class="text-xs text-gray-400 mb-3">
+                                {{ $company->industry ?: 'Industry not set' }}
+                                @if ($company->address)
+                                    &middot; {{ Str::limit($company->address, 25) }}
+                                @endif
+                            </p>
+                            <p class="text-xs text-gray-500 leading-relaxed">
+                                {{ $company->about ? Str::limit($company->about, 120) : 'Add a short description so candidates know what your company does.' }}
+                            </p>
+                            @if ($company->website)
+                                <a href="#"
+                                    class="inline-flex items-center gap-1 text-xs font-bold text-violet-600 mt-3">
+                                    <i class="fas fa-link text-[10px]"></i> {{ $company->website }}
+                                </a>
+                            @endif
                         </div>
-                        <p class="font-bold text-sm mb-1">{{ $company->company_name ?: 'Your company name' }}</p>
-                        <p class="text-xs text-gray-400 mb-3">
-                            {{ $company->industry ?: 'Industry not set' }}
-                            @if($company->address) &middot; {{ Str::limit($company->address, 25) }} @endif
-                        </p>
-                        <p class="text-xs text-gray-500 leading-relaxed">
-                            {{ $company->about ? Str::limit($company->about, 120) : 'Add a short description so candidates know what your company does.' }}
-                        </p>
-                        @if($company->website)
-                            <a href="#" class="inline-flex items-center gap-1 text-xs font-bold text-violet-600 mt-3">
-                                <i class="fas fa-link text-[10px]"></i> {{ $company->website }}
-                            </a>
-                        @endif
                     </div>
-                </div>
 
-                {{-- Tips card --}}
-                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 border-b border-gray-200">
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Tips</p>
+                    {{-- Tips card --}}
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Tips</p>
+                        </div>
+                        <div class="p-5 space-y-3">
+                            <div class="flex gap-2">
+                                <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
+                                <p class="text-xs text-gray-500 leading-relaxed">A complete profile gets more applicants
+                                    than a
+                                    bare one.</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
+                                <p class="text-xs text-gray-500 leading-relaxed">Keep "About" short and specific — mention
+                                    your
+                                    tech stack or team size.</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
+                                <p class="text-xs text-gray-500 leading-relaxed">A real website link builds trust with
+                                    candidates.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex gap-2">
-                            <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
-                            <p class="text-xs text-gray-500 leading-relaxed">A complete profile gets more applicants than a bare one.</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
-                            <p class="text-xs text-gray-500 leading-relaxed">Keep "About" short and specific — mention your tech stack or team size.</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
-                            <p class="text-xs text-gray-500 leading-relaxed">A real website link builds trust with candidates.</p>
-                        </div>
-                    </div>
-                </div>
 
+                </div>
             </div>
+
         </div>
 
-    </div>
-
-@endsection
+    @endsection

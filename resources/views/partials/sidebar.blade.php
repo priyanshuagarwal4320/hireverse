@@ -91,10 +91,22 @@
     </nav>
 
     <div class="mt-6 mx-4 p-3 rounded-xl bg-gray-50 flex items-center gap-3">
-        <div
-            class="w-8 h-8 rounded-lg bg-violet-600 text-white flex items-center justify-center text-xs font-extrabold flex-shrink-0">
-            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
-        </div>
+        @php
+            $avatarImage = null;
+            if (auth()->user()->role === 'company' && auth()->user()->company?->logo) {
+                $avatarImage = auth()->user()->company->logo;
+            } elseif (auth()->user()->role === 'candidate' && auth()->user()->candidate?->profile_photo) {
+                $avatarImage = auth()->user()->candidate->profile_photo;
+            }
+        @endphp
+        @if ($avatarImage)
+            <img src="{{ asset('storage/' . $avatarImage) }}" class="w-8 h-8 rounded-lg object-cover flex-shrink-0">
+        @else
+            <div
+                class="w-8 h-8 rounded-lg bg-violet-600 text-white flex items-center justify-center text-xs font-extrabold flex-shrink-0">
+                {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+            </div>
+        @endif
         <div>
             <p class="text-xs font-bold">{{ auth()->user()->name }}</p>
             <p class="text-xs text-gray-400">{{ ucfirst(auth()->user()->role) }}</p>

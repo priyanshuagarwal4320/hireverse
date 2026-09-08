@@ -30,7 +30,16 @@ class CompanyProfileController extends Controller
             'industry' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
             'about' => ['nullable', 'string', 'max:2000'],
+            'logo' => ['nullable', 'image', 'max:2048'],
         ]);
+
+        if ($request->hasFile('logo')) {
+            if ($company->logo) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($company->logo);
+            }
+
+            $validated['logo'] = $request->file('logo')->store('company-logos', 'public');
+        }
 
         $company->update($validated);
 
