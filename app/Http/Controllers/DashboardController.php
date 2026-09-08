@@ -75,22 +75,31 @@ class DashboardController extends Controller
             ->get();
 
         $statusBreakdown = Application::whereIn('job_post_id', $jobIds)
-            ->selectRaw('status, COUNT(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
+    ->selectRaw('status, COUNT(*) as total')
+    ->groupBy('status')
+    ->pluck('total', 'status');
 
-        return view('dashboard.company', compact(
-            'company',
-            'totalJobs',
-            'openJobs',
-            'totalApplicants',
-            'shortlistedCount',
-            'interviewsSetCount',
-            'recentJobs',
-            'recentApplicants',
-            'upcomingInterviews',
-            'statusBreakdown'
-        ));
+$applicationsPerJob = Application::whereIn('job_post_id', $jobIds)
+    ->join('job_posts', 'applications.job_post_id', '=', 'job_posts.id')
+    ->selectRaw('job_posts.job_title, COUNT(applications.id) as total')
+    ->groupBy('job_posts.id', 'job_posts.job_title')
+    ->orderByDesc('total')
+    ->take(5)
+    ->pluck('total', 'job_title');
+
+return view('dashboard.company', compact(
+    'company',
+    'totalJobs',
+    'openJobs',
+    'totalApplicants',
+    'shortlistedCount',
+    'interviewsSetCount',
+    'recentJobs',
+    'recentApplicants',
+    'upcomingInterviews',
+    'statusBreakdown',
+    'applicationsPerJob'
+));
     }
 
     public function candidate(Request $request)
@@ -98,24 +107,54 @@ class DashboardController extends Controller
         $candidate = auth()->user()->candidate;
 
         $openJobs = JobPost::where('status', 'open')
-            ->when($request->search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('job_title', 'like', "%{$search}%")
-                        ->orWhere('location', 'like', "%{$search}%");
-                });
-            })
-            ->when($request->job_type, function ($query, $type) {
-                $query->where('job_type', $type);
-            })
-            ->with('company')
-            ->latest()
-            ->take(10)
-            ->get();
+    ->when($request->search, function ($query, $search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('job_title', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%");
+        });
+    })
+    ->when($request->job_type, function ($query, $type) {
+        $query->where('job_type', $type);
+    })
+    ->when($request->min_salary, function ($query, $minSalary) {
+        $query->where('salary', '>=', $minSalary);
+    })
+    ->when($request->max_salary, function ($query, $maxSalary) {
+        $query->where('salary', '<=', $maxSalary);
+    })
+    ->when($request->experience, function ($query, $experience) {
+        $query->where('experience', 'like', "%{$experience}%");
+    })
+    ->with('company')
+    ->latest()
+    ->take(10)
+    ->get();
 
         $myApplications = $candidate
-            ? $candidate->applications()->with('jobPost')->latest()->get()
+            ? $candidate->applications()->with('jobPost.company')->latest()->get()
             : collect();
 
-        return view('dashboard.candidate', compact('openJobs', 'myApplications'));
+        $savedJobIds = $candidate
+            ? $candidate->savedJobs()->pluck('job_post_id')->toArray()
+            : [];
+
+        return view('dashboard.candidate', compact('openJobs', 'myApplications', 'savedJobIds'));
+    }
+    public function jobDetail(JobPost $job)
+    {
+        abort_if($job->status !== 'open', 404);
+
+        $candidate = auth()->user()->candidate;
+        $alreadyApplied = $candidate
+            ? $candidate->applications()->where('job_post_id', $job->id)->exists()
+            : false;
+
+        $job->load('company');
+
+        $isSaved = $candidate
+            ? $candidate->savedJobs()->where('job_post_id', $job->id)->exists()
+            : false;
+
+        return view('candidate.job-detail', compact('job', 'alreadyApplied', 'isSaved'));
     }
 }

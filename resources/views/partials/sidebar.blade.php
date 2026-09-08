@@ -70,6 +70,10 @@
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.dashboard') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <i class="fas fa-magnifying-glass w-4 text-center"></i> Browse jobs
             </a>
+            <a href="{{ route('candidate.saved-jobs') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.saved-jobs') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <i class="fas fa-bookmark w-4 text-center"></i> Saved jobs
+            </a>
             <p class="text-xs font-bold text-gray-400 uppercase px-3 pt-4 pb-1">My account</p>
             <a href="{{ route('candidate.profile.edit') }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold {{ request()->routeIs('candidate.profile.*') ? 'bg-violet-50 text-violet-700' : 'text-gray-600 hover:bg-gray-50' }}">

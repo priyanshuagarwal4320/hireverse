@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\JobController as AdminJobController;
 use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
 use App\Http\Controllers\Admin\InterviewController as AdminInterviewController;
 use App\Http\Controllers\Admin\ResultController as AdminResultController;
+use App\Http\Controllers\PublicJobController;
+use App\Http\Controllers\SavedJobController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -31,6 +33,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/jobs', [PublicJobController::class, 'index'])->name('public.jobs');
+Route::get('/jobs/{job}', [PublicJobController::class, 'show'])->name('public.job.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
@@ -159,6 +164,18 @@ Route::middleware(['auth', 'role:candidate'])->group(function () {
 
     Route::get('/candidate/applications', [ApplicationController::class, 'index'])
         ->name('candidate.applications');
+
+    Route::get('/candidate/jobs/{job}', [DashboardController::class, 'jobDetail'])
+        ->name('candidate.job.detail');
+
+    Route::get('/candidate/saved-jobs', [SavedJobController::class, 'index'])
+        ->name('candidate.saved-jobs');
+
+    Route::post('/jobs/{job}/save', [SavedJobController::class, 'store'])
+        ->name('jobs.save');
+
+    Route::delete('/jobs/{job}/save', [SavedJobController::class, 'destroy'])
+        ->name('jobs.unsave');
 });
 
 Route::middleware('auth')->group(function () {

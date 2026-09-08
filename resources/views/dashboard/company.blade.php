@@ -157,10 +157,16 @@
             </tbody>
         </table>
     </div>
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 mt-6">
-        <h3 class="text-sm font-bold mb-4">Applications by status</h3>
-        <div style="max-width: 280px; margin: 0 auto;">
-            <canvas id="statusChart"></canvas>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+            <h3 class="text-sm font-bold mb-4">Applications by status</h3>
+            <div style="max-width: 280px; margin: 0 auto;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+            <h3 class="text-sm font-bold mb-4">Top jobs by applications</h3>
+            <canvas id="jobsChart"></canvas>
         </div>
     </div>
 
@@ -188,6 +194,36 @@
                                     size: 11
                                 },
                                 boxWidth: 12
+                            }
+                        }
+                    }
+                }
+            });
+
+            const jobsCtx = document.getElementById('jobsChart');
+            new Chart(jobsCtx, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode($applicationsPerJob->keys()) !!},
+                    datasets: [{
+                        label: 'Applications',
+                        data: {!! json_encode($applicationsPerJob->values()) !!},
+                        backgroundColor: '#6c5ce7',
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
                             }
                         }
                     }
