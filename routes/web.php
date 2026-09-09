@@ -176,6 +176,9 @@ Route::middleware(['auth', 'role:candidate'])->group(function () {
 
     Route::delete('/jobs/{job}/save', [SavedJobController::class, 'destroy'])
         ->name('jobs.unsave');
+
+    Route::patch('/applications/{application}/withdraw', [ApplicationController::class, 'withdraw'])
+        ->name('applications.withdraw');
 });
 
 Route::middleware('auth')->group(function () {

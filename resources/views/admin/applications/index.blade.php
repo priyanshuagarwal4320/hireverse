@@ -32,6 +32,7 @@
                                 @if ($application->status === 'pending') bg-amber-50 text-amber-700
                                 @elseif($application->status === 'shortlisted') bg-violet-50 text-violet-700
                                 @elseif($application->status === 'selected') bg-green-50 text-green-700
+                                @elseif($application->status === 'withdrawn') bg-gray-100 text-gray-500
                                 @else bg-red-50 text-red-700 @endif">
                                 {{ ucfirst($application->status) }}
                             </span>

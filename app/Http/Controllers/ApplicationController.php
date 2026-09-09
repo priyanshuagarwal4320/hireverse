@@ -51,6 +51,19 @@ class ApplicationController extends Controller
 
         return redirect()->route('candidate.dashboard')->with('status', 'Application submitted successfully!');
     }
+
+    public function withdraw(Application $application): RedirectResponse
+    {
+        $candidate = auth()->user()->candidate;
+
+        abort_if($application->candidate_id !== $candidate->id, 403);
+
+        abort_if($application->status !== 'pending', 403, 'Only pending applications can be withdrawn.');
+
+        $application->update(['status' => 'withdrawn']);
+
+        return back()->with('status', 'Application withdrawn successfully.');
+    }
     public function updateStatus(Request $request, Application $application): RedirectResponse
     {
         $companyId = $application->jobPost->company_id;
