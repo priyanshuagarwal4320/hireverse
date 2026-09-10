@@ -121,19 +121,24 @@
             <div class="px-5 py-4 border-b border-gray-200">
                 <h3 class="text-sm font-bold">My applications</h3>
             </div>
-            <div class="p-2">
+                        <div class="p-2">
                 @forelse($myApplications as $app)
-                    <div class="flex items-center justify-between px-3 py-3 border-b border-gray-100 last:border-0">
-                        <span class="text-sm">{{ $app->jobPost->job_title }} <span
-                                class="text-gray-400">({{ $app->jobPost->company->company_name }})</span></span> <span
-                            class="text-xs font-bold px-3 py-1 rounded-full
-                            @if ($app->status === 'pending') bg-amber-50 text-amber-700
-                            @elseif($app->status === 'shortlisted') bg-violet-50 text-violet-700
-                            @elseif($app->status === 'selected') bg-green-50 text-green-700
-                            @elseif($app->status === 'withdrawn') bg-gray-100 text-gray-500
-                            @else bg-red-50 text-red-700 @endif">
-                            {{ ucfirst($app->status) }}
-                        </span>
+                    <div class="px-3 py-3 border-b border-gray-100 last:border-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">{{ $app->jobPost->job_title }} <span
+                                    class="text-gray-400">({{ $app->jobPost->company->company_name }})</span></span>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ml-2
+                                @if ($app->status === 'pending') bg-amber-50 text-amber-700
+                                @elseif($app->status === 'shortlisted') bg-violet-50 text-violet-700
+                                @elseif($app->status === 'selected') bg-green-50 text-green-700
+                                @elseif($app->status === 'withdrawn') bg-gray-100 text-gray-500
+                                @else bg-red-50 text-red-700 @endif">
+                                {{ ucfirst($app->status) }}
+                            </span>
+                        </div>
+                        @if ($app->status !== 'withdrawn')
+                            <p class="text-xs text-gray-400 mt-1">{{ $app->currentStage() }}</p>
+                        @endif
                     </div>
                 @empty
                     <p class="text-center text-gray-400 text-sm py-6">You haven't applied to any jobs yet.</p>

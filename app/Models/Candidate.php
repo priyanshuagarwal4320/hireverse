@@ -41,4 +41,17 @@ class Candidate extends Model
     {
         return $this->hasMany(SavedJob::class);
     }
+    public function profileCompletion()
+    {
+        $fields = ['mobile', 'dob', 'gender', 'profile_photo', 'resume', 'qualification', 'experience', 'skills', 'city'];
+        $filled = 0;
+
+        foreach ($fields as $field) {
+            if (!empty($this->$field)) {
+                $filled++;
+            }
+        }
+
+        return round(($filled / count($fields)) * 100);
+    }
 }

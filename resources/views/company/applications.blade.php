@@ -25,18 +25,19 @@
                         <td class="px-5 py-3">{{ $application->jobPost->job_title }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $application->applied_date->format('d M Y') }}</td>
                         <td class="px-5 py-3">
-                            <span class="text-xs font-bold px-3 py-1 rounded-full
-                                @if($application->status === 'pending') bg-amber-50 text-amber-700
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full
+                                @if ($application->status === 'pending') bg-amber-50 text-amber-700
                                 @elseif($application->status === 'shortlisted') bg-violet-50 text-violet-700
                                 @elseif($application->status === 'selected') bg-green-50 text-green-700
                                 @elseif($application->status === 'withdrawn') bg-gray-100 text-gray-500
-                                @else bg-red-50 text-red-700
-                                @endif">
+                                @else bg-red-50 text-red-700 @endif">
                                 {{ ucfirst($application->status) }}
                             </span>
                         </td>
                         <td class="px-5 py-3 text-right">
-                            <a href="{{ route('company.jobs.applicants', $application->job_post_id) }}" class="text-xs font-semibold text-violet-600">
+                            <a href="{{ route('applications.show', $application) }}"
+                                class="text-xs font-semibold text-violet-600">
                                 Manage
                             </a>
                         </td>

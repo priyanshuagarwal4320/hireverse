@@ -24,7 +24,7 @@
                         <td class="px-5 py-3 font-semibold">{{ $application->jobPost->job_title }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $application->jobPost->company->company_name }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $application->applied_date->format('d M Y') }}</td>
-                        <td class="px-5 py-3">
+                                                <td class="px-5 py-3">
                             <span
                                 class="text-xs font-bold px-3 py-1 rounded-full
                                 @if ($application->status === 'pending') bg-amber-50 text-amber-700
@@ -34,6 +34,9 @@
                                 @else bg-red-50 text-red-700 @endif">
                                 {{ ucfirst($application->status) }}
                             </span>
+                            @if ($application->status !== 'withdrawn')
+                                <p class="text-xs text-gray-400 mt-1">{{ $application->currentStage() }}</p>
+                            @endif
                         </td>
                         <td class="px-5 py-3 text-right">
                             @if ($application->status === 'pending')

@@ -10,11 +10,13 @@ use App\Models\Candidate;
 class CandidateProfileController extends Controller
 {
     public function edit(): View
-    {
-        $candidate = auth()->user()->candidate;
+{
+    $candidate = auth()->user()->candidate;
 
-        return view('candidate.profile', compact('candidate'));
-    }
+    $profileCompletion = $candidate ? $candidate->profileCompletion() : 0;
+
+    return view('candidate.profile', compact('candidate', 'profileCompletion'));
+}
 
     public function update(Request $request): RedirectResponse
     {

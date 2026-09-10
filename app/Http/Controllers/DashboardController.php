@@ -131,7 +131,7 @@ return view('dashboard.company', compact(
     ->get();
 
         $myApplications = $candidate
-            ? $candidate->applications()->with('jobPost.company')->latest()->get()
+            ? $candidate->applications()->with('jobPost.company', 'interview')->latest()->get()
             : collect();
 
         $savedJobIds = $candidate

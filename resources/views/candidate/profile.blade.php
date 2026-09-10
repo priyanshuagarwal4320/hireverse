@@ -6,7 +6,12 @@
 
     <h1 class="text-xl font-extrabold mb-1">My profile</h1>
     <p class="text-gray-500 text-sm mb-6">Keep your profile updated so companies can find you</p>
-
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 mb-6">
+        <p class="text-sm font-bold mb-2">Profile completeness: {{ $profileCompletion }}%</p>
+        <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-violet-600 h-2 rounded-full" style="width: {{ $profileCompletion }}%"></div>
+        </div>
+    </div>
     @if (session('status'))
         <div class="mb-6 px-4 py-3 rounded-xl bg-green-50 text-green-700 text-sm font-semibold flex items-center gap-2">
             <i class="fas fa-check-circle"></i> {{ session('status') }}

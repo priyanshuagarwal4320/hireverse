@@ -15,8 +15,8 @@ class ApplicationController extends Controller
         $candidate = auth()->user()->candidate;
 
         $applications = $candidate
-            ? $candidate->applications()->with('jobPost.company')->latest()->paginate(10)
-            : collect();
+    ? $candidate->applications()->with('jobPost.company', 'interview')->latest()->paginate(10)
+    : collect();
 
         return view('candidate.applications', compact('applications'));
     }

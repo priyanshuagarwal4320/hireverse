@@ -35,4 +35,25 @@ class Application extends Model
     {
         return $this->hasOne(Interview::class);
     }
+
+    public function currentStage()
+    {
+        if ($this->status == 'rejected') {
+            return 'Not selected';
+        }
+
+        if ($this->status == 'selected') {
+            return 'Selected';
+        }
+
+        if ($this->interview) {
+            return 'Interview scheduled';
+        }
+
+        if ($this->status == 'shortlisted') {
+            return 'Shortlisted';
+        }
+
+        return 'Applied';
+    }
 }

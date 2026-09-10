@@ -107,6 +107,37 @@
                             @else bg-red-50 text-red-700 @endif">
                             {{ ucfirst($application->status) }}
                         </span>
+
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <p class="text-xs font-bold text-gray-400 uppercase mb-2">Update status</p>
+
+                            <form method="POST" action="{{ route('applications.update-status', $application) }}">
+                                @csrf
+                                @method('PATCH')
+
+                                <select name="status" onchange="this.form.submit()"
+                                    class="w-full text-xs border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500">
+
+                                    <option value="pending" {{ $application->status === 'pending' ? 'selected' : '' }}>
+                                        Pending
+                                    </option>
+
+                                    <option value="shortlisted"
+                                        {{ $application->status === 'shortlisted' ? 'selected' : '' }}>
+                                        Shortlisted
+                                    </option>
+
+                                    <option value="selected" {{ $application->status === 'selected' ? 'selected' : '' }}>
+                                        Selected
+                                    </option>
+
+                                    <option value="rejected" {{ $application->status === 'rejected' ? 'selected' : '' }}>
+                                        Rejected
+                                    </option>
+
+                                </select>
+                            </form>
+                        </div>
                         <p class="text-xs text-gray-400 mt-3">Applied {{ $application->applied_date->format('d M Y') }}</p>
 
                         @if ($application->interview)
