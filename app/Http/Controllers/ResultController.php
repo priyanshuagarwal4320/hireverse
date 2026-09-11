@@ -36,6 +36,7 @@ class ResultController extends Controller
         $interview->application->update([
             'status' => $validated['status'] === 'pass' ? 'selected' : 'rejected',
         ]);
+        $interview->application->candidate->user->notify(new \App\Notifications\ApplicationStatusChanged($interview->application));
 
         return redirect()->route('company.jobs.applicants', $interview->application->job_post_id)
             ->with('status', 'Result recorded successfully.');
@@ -67,6 +68,7 @@ class ResultController extends Controller
         $interview->application->update([
             'status' => $validated['status'] === 'pass' ? 'selected' : 'rejected',
         ]);
+        $interview->application->candidate->user->notify(new \App\Notifications\ApplicationStatusChanged($interview->application));
 
         return redirect()->route('company.interviews')->with('status', 'Result updated successfully.');
     }

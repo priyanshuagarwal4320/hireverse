@@ -15,8 +15,8 @@ class ApplicationController extends Controller
         $candidate = auth()->user()->candidate;
 
         $applications = $candidate
-    ? $candidate->applications()->with('jobPost.company', 'interview')->latest()->paginate(10)
-    : collect();
+            ? $candidate->applications()->with('jobPost.company', 'interview')->latest()->paginate(10)
+            : collect();
 
         return view('candidate.applications', compact('applications'));
     }
@@ -44,10 +44,17 @@ class ApplicationController extends Controller
             return redirect()->route('candidate.dashboard')->with('status', 'You have already applied to this job.');
         }
 
-        $candidate->applications()->create([
+        // $candidate->applications()->create([
+        //     'job_post_id' => $job->id,
+        //     'applied_date' => now(),
+        // ]);
+
+        $application = $candidate->applications()->create([
             'job_post_id' => $job->id,
             'applied_date' => now(),
         ]);
+
+        $job->company->user->notify(new \App\Notifications\NewApplicationNotification($application));
 
         return redirect()->route('candidate.dashboard')->with('status', 'Application submitted successfully!');
     }
@@ -75,6 +82,7 @@ class ApplicationController extends Controller
         ]);
 
         $application->update(['status' => $request->status]);
+        $application->candidate->user->notify(new \App\Notifications\ApplicationStatusChanged($application));
 
         return back()->with('status', 'Application status updated.');
     }

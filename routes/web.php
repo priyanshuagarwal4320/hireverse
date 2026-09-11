@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\InterviewController as AdminInterviewController;
 use App\Http\Controllers\Admin\ResultController as AdminResultController;
 use App\Http\Controllers\PublicJobController;
 use App\Http\Controllers\SavedJobController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -53,6 +54,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/candidates/{candidate}/resume', [CandidateProfileController::class, 'downloadResume'])
         ->name('candidate.resume.download')
         ->middleware('auth');
+
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

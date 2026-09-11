@@ -33,6 +33,9 @@ class InterviewController extends Controller
         ]);
 
         $application->interview()->create($validated);
+        $interview = $application->interview()->create($validated);
+
+        $application->candidate->user->notify(new \App\Notifications\InterviewScheduled($interview));
 
         return redirect()->route('company.jobs.applicants', $application->job_post_id)
             ->with('status', 'Interview scheduled successfully.');
