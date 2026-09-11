@@ -34,6 +34,29 @@
                         </div>
 
                         <div>
+                            <x-input-label for="category" :value="__('Category')" />
+                            @php $currentCategory = old('category', $job->category); @endphp
+                            <select id="category" name="category" required
+                                class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                <option value="">Select category</option>
+                                <option value="Engineering" {{ $currentCategory === 'Engineering' ? 'selected' : '' }}>
+                                    Engineering</option>
+                                <option value="Design" {{ $currentCategory === 'Design' ? 'selected' : '' }}>Design</option>
+                                <option value="Sales" {{ $currentCategory === 'Sales' ? 'selected' : '' }}>Sales</option>
+                                <option value="Marketing" {{ $currentCategory === 'Marketing' ? 'selected' : '' }}>Marketing
+                                </option>
+                                <option value="Customer Support"
+                                    {{ $currentCategory === 'Customer Support' ? 'selected' : '' }}>Customer Support
+                                </option>
+                                <option value="HR" {{ $currentCategory === 'HR' ? 'selected' : '' }}>HR</option>
+                                <option value="Finance" {{ $currentCategory === 'Finance' ? 'selected' : '' }}>Finance
+                                </option>
+                                <option value="Other" {{ $currentCategory === 'Other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                        </div>
+
+                        <div>
                             <x-input-label for="job_description" :value="__('Job description')" />
                             <textarea id="job_description" name="job_description" rows="5" required
                                 class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('job_description', $job->job_description) }}</textarea>
@@ -46,9 +69,11 @@
                                 <select id="job_type" name="job_type" required x-model="type"
                                     class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
                                     @php $currentType = old('job_type', $job->job_type); @endphp
-                                    <option value="full_time" {{ $currentType === 'full_time' ? 'selected' : '' }}>Full time
+                                    <option value="full_time" {{ $currentType === 'full_time' ? 'selected' : '' }}>Full
+                                        time
                                     </option>
-                                    <option value="part_time" {{ $currentType === 'part_time' ? 'selected' : '' }}>Part time
+                                    <option value="part_time" {{ $currentType === 'part_time' ? 'selected' : '' }}>Part
+                                        time
                                     </option>
                                     <option value="contract" {{ $currentType === 'contract' ? 'selected' : '' }}>Contract
                                     </option>

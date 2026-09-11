@@ -28,6 +28,27 @@
                         </div>
 
                         <div>
+                            <x-input-label for="category" :value="__('Category')" />
+                            <select id="category" name="category" required
+                                class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                <option value="">Select category</option>
+                                <option value="Engineering" {{ old('category') === 'Engineering' ? 'selected' : '' }}>
+                                    Engineering</option>
+                                <option value="Design" {{ old('category') === 'Design' ? 'selected' : '' }}>Design</option>
+                                <option value="Sales" {{ old('category') === 'Sales' ? 'selected' : '' }}>Sales</option>
+                                <option value="Marketing" {{ old('category') === 'Marketing' ? 'selected' : '' }}>Marketing
+                                </option>
+                                <option value="Customer Support"
+                                    {{ old('category') === 'Customer Support' ? 'selected' : '' }}>Customer Support</option>
+                                <option value="HR" {{ old('category') === 'HR' ? 'selected' : '' }}>HR</option>
+                                <option value="Finance" {{ old('category') === 'Finance' ? 'selected' : '' }}>Finance
+                                </option>
+                                <option value="Other" {{ old('category') === 'Other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                        </div>
+
+                        <div>
                             <x-input-label for="job_description" :value="__('Job description')" />
                             <textarea id="job_description" name="job_description" rows="5" required
                                 placeholder="Describe the role, responsibilities, and requirements..."
@@ -45,7 +66,8 @@
                                         time</option>
                                     <option value="part_time" {{ old('job_type') === 'part_time' ? 'selected' : '' }}>Part
                                         time</option>
-                                    <option value="contract" {{ old('job_type') === 'contract' ? 'selected' : '' }}>Contract
+                                    <option value="contract" {{ old('job_type') === 'contract' ? 'selected' : '' }}>
+                                        Contract
                                     </option>
                                     <option value="internship" {{ old('job_type') === 'internship' ? 'selected' : '' }}>
                                         Internship</option>

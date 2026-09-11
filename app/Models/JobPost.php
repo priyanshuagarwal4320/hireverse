@@ -14,6 +14,7 @@ class JobPost extends Model
     protected $fillable = [
         'company_id',
         'job_title',
+        'category',
         'job_description',
         'job_type',
         'experience',
@@ -32,6 +33,15 @@ class JobPost extends Model
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
+    }
+    public function similarJobs()
+    {
+        return JobPost::where('status', 'open')
+            ->where('category', $this->category)
+            ->where('id', '!=', $this->id)
+            ->latest()
+            ->take(3)
+            ->get();
     }
     protected $casts = [
         'last_date' => 'date',

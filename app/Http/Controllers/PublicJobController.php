@@ -14,7 +14,7 @@ class PublicJobController extends Controller
             ->when($request->search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('job_title', 'like', "%{$search}%")
-                      ->orWhere('location', 'like', "%{$search}%");
+                        ->orWhere('location', 'like', "%{$search}%");
                 });
             })
             ->when($request->job_type, function ($query, $type) {
@@ -31,7 +31,7 @@ class PublicJobController extends Controller
     public function show(JobPost $job): View
     {
         abort_if($job->status !== 'open', 404);
-
-        return view('public.job-detail', compact('job'));
+        $similarJobs = $job->similarJobs();
+        return view('public.job-detail', compact('job', 'similarJobs'   ));
     }
 }

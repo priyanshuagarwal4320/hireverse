@@ -33,6 +33,7 @@ class JobPostController extends Controller
 
         $validated = $request->validate([
             'job_title' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'max:255'],
             'job_description' => ['required', 'string', 'max:5000'],
             'job_type' => ['required', 'in:full_time,part_time,contract,internship'],
             'experience' => ['nullable', 'string', 'max:255'],
@@ -60,6 +61,7 @@ class JobPostController extends Controller
 
         $validated = $request->validate([
             'job_title' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'max:255'],
             'job_description' => ['required', 'string', 'max:5000'],
             'job_type' => ['required', 'in:full_time,part_time,contract,internship'],
             'experience' => ['nullable', 'string', 'max:255'],

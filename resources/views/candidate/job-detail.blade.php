@@ -84,5 +84,24 @@
             @endif
         </div>
     </div>
+    @if ($similarJobs->count() > 0)
+        <div class="mt-6 max-w-3xl">
+            <h3 class="text-sm font-bold mb-3">Similar jobs</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                @foreach ($similarJobs as $similarJob)
+                    <a href="{{ route('candidate.job.detail', $similarJob) }}"
+                        class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:border-violet-400 block">
+                        <p class="font-bold text-sm mb-1">{{ $similarJob->job_title }}</p>
+                        <p class="text-xs text-gray-500">
+                            {{ $similarJob->company->company_name }}
+                            @if ($similarJob->location)
+                                &middot; {{ $similarJob->location }}
+                            @endif
+                        </p>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
 @endsection

@@ -150,11 +150,12 @@ return view('dashboard.company', compact(
             : false;
 
         $job->load('company');
+        $similarJobs = $job->similarJobs();
 
         $isSaved = $candidate
             ? $candidate->savedJobs()->where('job_post_id', $job->id)->exists()
             : false;
 
-        return view('candidate.job-detail', compact('job', 'alreadyApplied', 'isSaved'));
+        return view('candidate.job-detail', compact('job', 'alreadyApplied', 'isSaved', 'similarJobs'));
     }
 }
