@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ResultController as AdminResultController;
 use App\Http\Controllers\PublicJobController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -183,6 +184,9 @@ Route::middleware(['auth', 'role:candidate'])->group(function () {
 
     Route::patch('/applications/{application}/withdraw', [ApplicationController::class, 'withdraw'])
         ->name('applications.withdraw');
+
+    Route::post('/companies/{company}/reviews', [ReviewController::class, 'store'])
+        ->name('reviews.store');
 });
 
 Route::middleware('auth')->group(function () {

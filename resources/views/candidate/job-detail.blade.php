@@ -84,6 +84,55 @@
             @endif
         </div>
     </div>
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 mt-4 max-w-3xl">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-bold">Company reviews</h3>
+            @if ($job->company->reviews()->count() > 0)
+                <span class="text-sm font-bold text-amber-500">
+                    <i class="fas fa-star"></i> {{ $job->company->averageRating() }}
+                    <span class="text-gray-400 font-normal">({{ $job->company->reviews()->count() }})</span>
+                </span>
+            @endif
+        </div>
+
+        @forelse ($job->company->reviews()->latest()->get() as $review)
+            <div class="border-b border-gray-100 last:border-0 py-3">
+                <div class="flex items-center gap-1 mb-1">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <i
+                            class="fas fa-star text-xs {{ $i <= $review->rating ? 'text-amber-400' : 'text-gray-200' }}"></i>
+                    @endfor
+                </div>
+                @if ($review->review)
+                    <p class="text-sm text-gray-600">{{ $review->review }}</p>
+                @endif
+            </div>
+        @empty
+            <p class="text-sm text-gray-400">No reviews yet.</p>
+        @endforelse
+
+        @if (auth()->user()->candidate?->canReviewCompany($job->company_id))
+            <form method="POST" action="{{ route('reviews.store', $job->company) }}"
+                class="mt-4 pt-4 border-t border-gray-100">
+                @csrf
+                <label class="text-xs font-bold text-gray-500 mb-1 block">Rate this company</label>
+                <select name="rating" required class="border-gray-300 rounded-md shadow-sm text-sm mb-2">
+                    <option value="">Select rating</option>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Below average</option>
+                    <option value="1">1 - Poor</option>
+                </select>
+                <textarea name="review" rows="2" placeholder="Share your experience (optional)"
+                    class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mb-2"></textarea>
+                <button type="submit" class="text-xs font-bold px-4 py-2 rounded-lg bg-gray-900 text-white">
+                    Submit review
+                </button>
+            </form>
+        @endif
+    </div>
+
     @if ($similarJobs->count() > 0)
         <div class="mt-6 max-w-3xl">
             <h3 class="text-sm font-bold mb-3">Similar jobs</h3>

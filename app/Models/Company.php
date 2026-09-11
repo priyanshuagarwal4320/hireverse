@@ -31,4 +31,14 @@ class Company extends Model
     {
         return $this->hasMany(JobPost::class);
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function averageRating()
+    {
+        return round($this->reviews()->avg('rating'), 1);
+    }
 }

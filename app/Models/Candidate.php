@@ -54,4 +54,26 @@ class Candidate extends Model
 
         return round(($filled / count($fields)) * 100);
     }
+        public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function canReviewCompany($companyId)
+    {
+        $alreadyReviewed = $this->reviews()->where('company_id', $companyId)->exists();
+
+        if ($alreadyReviewed) {
+            return false;
+        }
+
+        $hadInterview = $this->applications()
+            ->whereHas('jobPost', function ($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            })
+            ->whereHas('interview')
+            ->exists();
+
+        return $hadInterview;
+    }
 }
