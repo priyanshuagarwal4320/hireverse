@@ -1,7 +1,13 @@
 <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-7">
-    <div>
-        <p class="text-sm font-bold">@yield('page-title', 'Dashboard')</p>
-        <p class="text-xs text-gray-400">Home / @yield('page-title', 'Dashboard')</p>
+    <div class="flex items-center gap-4">
+        <button @click="sidebarOpen = !sidebarOpen"
+            class="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100">
+            <i class="fas fa-bars text-sm"></i>
+        </button>
+        <div>
+            <p class="text-sm font-bold">@yield('page-title', 'Dashboard')</p>
+            <p class="text-xs text-gray-400">Home / @yield('page-title', 'Dashboard')</p>
+        </div>
     </div>
     <div class="flex items-center gap-3">
         <div class="relative" x-data="{ open: false }">

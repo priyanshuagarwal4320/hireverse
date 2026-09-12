@@ -11,7 +11,7 @@
 
 <body class="bg-gray-50 font-sans antialiased">
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
         @include('partials.sidebar')
 
         <div class="flex-1 flex flex-col overflow-hidden">
