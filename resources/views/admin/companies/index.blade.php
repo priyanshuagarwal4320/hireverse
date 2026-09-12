@@ -26,6 +26,7 @@
                     <th class="px-5 py-3">Email</th>
                     <th class="px-5 py-3">Industry</th>
                     <th class="px-5 py-3">Jobs posted</th>
+                    <th class="px-5 py-3">Status</th>
                     <th class="px-5 py-3">Joined</th>
                     <th class="px-5 py-3 text-right">Action</th>
                 </tr>
@@ -33,23 +34,44 @@
             <tbody>
                 @forelse($companies as $company)
                     <tr class="border-t border-gray-100">
-                        <td class="px-5 py-3 font-semibold">{{ $company->company_name }}</td>
+                        <td class="px-5 py-3 font-semibold">
+                            {{ $company->company_name }}
+                            @if ($company->is_verified)
+                                <i class="fas fa-circle-check text-blue-500 text-xs" title="Verified"></i>
+                            @endif
+                        </td>
                         <td class="px-5 py-3 text-gray-500">{{ $company->user->email }}</td>
                         <td class="px-5 py-3 text-gray-500">{{ $company->industry ?: '—' }}</td>
                         <td class="px-5 py-3">{{ $company->job_posts_count }}</td>
+                        <td class="px-5 py-3">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full
+                                {{ $company->is_verified ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-500' }}">
+                                {{ $company->is_verified ? 'Verified' : 'Unverified' }}
+                            </span>
+                        </td>
                         <td class="px-5 py-3 text-gray-500">{{ $company->created_at->format('d M Y') }}</td>
                         <td class="px-5 py-3 text-right">
-                            <form method="POST" action="{{ route('admin.companies.destroy', $company) }}"
-                                onsubmit="return confirm('This will permanently delete this company and all its jobs, applications, interviews, and results. Continue?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-xs font-semibold text-red-600">Delete</button>
-                            </form>
+                            <div class="flex items-center justify-end gap-3">
+                                <a href="{{ route('admin.companies.show', $company) }}" class="text-xs font-semibold text-gray-500">View</a>
+                                <form method="POST" action="{{ route('admin.companies.toggle-verification', $company) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="text-xs font-semibold text-violet-600">
+                                        {{ $company->is_verified ? 'Unverify' : 'Verify' }}
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ route('admin.companies.destroy', $company) }}"
+                                    onsubmit="return confirm('This will permanently delete this company and all its jobs, applications, interviews, and results. Continue?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-xs font-semibold text-red-600">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-5 py-10 text-center text-gray-400">
+                        <td colspan="7" class="px-5 py-10 text-center text-gray-400">
                             No companies registered yet.
                         </td>
                     </tr>

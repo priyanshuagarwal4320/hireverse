@@ -44,8 +44,8 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('role:admin')
         ->name('admin.dashboard');
 
-    Route::get('/company/dashboard', [DashboardController::class, 'company'])
-        ->middleware('role:company')
+        Route::get('/company/dashboard', [DashboardController::class, 'company'])
+        ->middleware(['role:company', 'company.verified'])
         ->name('company.dashboard');
 
     Route::get('/candidate/dashboard', [DashboardController::class, 'candidate'])
@@ -67,6 +67,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/companies/{company}', [AdminCompanyController::class, 'destroy'])
         ->name('admin.companies.destroy');
 
+    Route::patch('/admin/companies/{company}/toggle-verification', [AdminCompanyController::class, 'toggleVerification'])
+        ->name('admin.companies.toggle-verification');
+
+    Route::get('/admin/companies/{company}', [AdminCompanyController::class, 'show'])
+        ->name('admin.companies.show');
+        
     Route::get('/admin/candidates', [AdminCandidateController::class, 'index'])
         ->name('admin.candidates.index');
 
@@ -93,12 +99,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:company'])->group(function () {
+    Route::get('/company/pending', function () {
+        return view('company.pending');
+    })->name('company.pending');
+
     Route::get('/company/profile', [CompanyProfileController::class, 'edit'])
         ->name('company.profile.edit');
 
     Route::put('/company/profile', [CompanyProfileController::class, 'update'])
         ->name('company.profile.update');
+});
 
+Route::middleware(['auth', 'role:company', 'company.verified'])->group(function () {
     Route::get('/company/jobs', [JobPostController::class, 'index'])
         ->name('company.jobs.index');
 
