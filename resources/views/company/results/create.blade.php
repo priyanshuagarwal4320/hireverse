@@ -5,10 +5,12 @@
 @section('content')
 
     <div class="mb-6">
-        <a href="{{ route('company.jobs.applicants', $interview->application->job_post_id) }}" class="text-xs font-semibold text-gray-500">&larr; Back to Applicants</a>
+        <a href="{{ route('company.jobs.applicants', $interview->application->job_post_id) }}"
+            class="text-xs font-semibold text-gray-500">&larr; Back to Applicants</a>
         <h1 class="text-xl font-extrabold mt-2 mb-1">Record interview result</h1>
         <p class="text-gray-500 text-sm">
-            For <strong>{{ $interview->application->candidate->user->name }}</strong> — {{ $interview->application->jobPost->job_title }}
+            For <strong>{{ $interview->application->candidate->user->name }}</strong> —
+            {{ $interview->application->jobPost->job_title }}
         </p>
     </div>
 
@@ -35,6 +37,63 @@
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
 
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <div>
+                                <x-input-label for="communication_rating" :value="__('Communication')" />
+                                <select id="communication_rating" name="communication_rating"
+                                    class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                    <option value="">Not rated</option>
+                                    <option value="5" {{ old('communication_rating') == '5' ? 'selected' : '' }}>5 -
+                                        Excellent</option>
+                                    <option value="4" {{ old('communication_rating') == '4' ? 'selected' : '' }}>4 -
+                                        Good</option>
+                                    <option value="3" {{ old('communication_rating') == '3' ? 'selected' : '' }}>3 -
+                                        Average</option>
+                                    <option value="2" {{ old('communication_rating') == '2' ? 'selected' : '' }}>2 -
+                                        Below average</option>
+                                    <option value="1" {{ old('communication_rating') == '1' ? 'selected' : '' }}>1 -
+                                        Poor</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('communication_rating')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="technical_rating" :value="__('Technical')" />
+                                <select id="technical_rating" name="technical_rating"
+                                    class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                    <option value="">Not rated</option>
+                                    <option value="5" {{ old('technical_rating') == '5' ? 'selected' : '' }}>5 -
+                                        Excellent</option>
+                                    <option value="4" {{ old('technical_rating') == '4' ? 'selected' : '' }}>4 - Good
+                                    </option>
+                                    <option value="3" {{ old('technical_rating') == '3' ? 'selected' : '' }}>3 -
+                                        Average</option>
+                                    <option value="2" {{ old('technical_rating') == '2' ? 'selected' : '' }}>2 - Below
+                                        average</option>
+                                    <option value="1" {{ old('technical_rating') == '1' ? 'selected' : '' }}>1 - Poor
+                                    </option>
+                                </select>
+                                <x-input-error :messages="$errors->get('technical_rating')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="culture_fit_rating" :value="__('Culture fit')" />
+                                <select id="culture_fit_rating" name="culture_fit_rating"
+                                    class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                    <option value="">Not rated</option>
+                                    <option value="5" {{ old('culture_fit_rating') == '5' ? 'selected' : '' }}>5 -
+                                        Excellent</option>
+                                    <option value="4" {{ old('culture_fit_rating') == '4' ? 'selected' : '' }}>4 -
+                                        Good</option>
+                                    <option value="3" {{ old('culture_fit_rating') == '3' ? 'selected' : '' }}>3 -
+                                        Average</option>
+                                    <option value="2" {{ old('culture_fit_rating') == '2' ? 'selected' : '' }}>2 -
+                                        Below average</option>
+                                    <option value="1" {{ old('culture_fit_rating') == '1' ? 'selected' : '' }}>1 -
+                                        Poor</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('culture_fit_rating')" class="mt-2" />
+                            </div>
+                        </div>
+
                         <div>
                             <x-input-label for="score" :value="__('Score (out of 100, optional)')" />
                             <x-text-input id="score" name="score" type="number" class="block mt-1 w-full"
@@ -44,8 +103,7 @@
 
                         <div>
                             <x-input-label for="remarks" :value="__('Remarks')" />
-                            <textarea id="remarks" name="remarks" rows="6"
-                                placeholder="Feedback about the candidate's performance..."
+                            <textarea id="remarks" name="remarks" rows="6" placeholder="Feedback about the candidate's performance..."
                                 class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('remarks') }}</textarea>
                             <x-input-error :messages="$errors->get('remarks')" class="mt-2" />
                         </div>
@@ -54,7 +112,8 @@
                 </div>
 
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('company.jobs.applicants', $interview->application->job_post_id) }}" class="text-xs font-semibold text-gray-500">Cancel</a>
+                    <a href="{{ route('company.jobs.applicants', $interview->application->job_post_id) }}"
+                        class="text-xs font-semibold text-gray-500">Cancel</a>
                     <x-primary-button class="!px-6">
                         <i class="fas fa-check mr-2"></i>{{ __('Save result') }}
                     </x-primary-button>
@@ -72,7 +131,8 @@
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Candidate</p>
                     </div>
                     <div class="p-5">
-                        <div class="w-11 h-11 rounded-xl bg-violet-600 text-white flex items-center justify-center font-extrabold text-sm mb-3">
+                        <div
+                            class="w-11 h-11 rounded-xl bg-violet-600 text-white flex items-center justify-center font-extrabold text-sm mb-3">
                             {{ strtoupper(substr($interview->application->candidate->user->name, 0, 2)) }}
                         </div>
                         <p class="font-bold text-sm mb-1">{{ $interview->application->candidate->user->name }}</p>
@@ -98,7 +158,8 @@
                         </div>
                         <div class="flex justify-between text-xs">
                             <span class="text-gray-400">Time</span>
-                            <span class="font-semibold">{{ \Carbon\Carbon::parse($interview->interview_time)->format('h:i A') }}</span>
+                            <span
+                                class="font-semibold">{{ \Carbon\Carbon::parse($interview->interview_time)->format('h:i A') }}</span>
                         </div>
                         <div class="flex justify-between text-xs">
                             <span class="text-gray-400">Mode</span>
@@ -114,11 +175,13 @@
                     <div class="p-5 space-y-3">
                         <div class="flex gap-2">
                             <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
-                            <p class="text-xs text-gray-500 leading-relaxed">Specific remarks help future hiring decisions more than a generic pass/fail.</p>
+                            <p class="text-xs text-gray-500 leading-relaxed">Specific remarks help future hiring decisions
+                                more than a generic pass/fail.</p>
                         </div>
                         <div class="flex gap-2">
                             <i class="fas fa-lightbulb text-amber-500 text-xs mt-0.5"></i>
-                            <p class="text-xs text-gray-500 leading-relaxed">This result is visible to the candidate once saved.</p>
+                            <p class="text-xs text-gray-500 leading-relaxed">This result is visible to the candidate once
+                                saved.</p>
                         </div>
                     </div>
                 </div>

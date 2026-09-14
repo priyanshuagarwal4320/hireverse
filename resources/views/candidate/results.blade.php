@@ -20,8 +20,37 @@
                         {{ ucfirst($result->status) }}
                     </span>
                 </div>
-                @if($result->score)
+                                @if($result->score)
                     <p class="text-xs text-gray-500 mb-2"><strong>Score:</strong> {{ $result->score }} / 100</p>
+                @endif
+
+                @if($result->communication_rating || $result->technical_rating || $result->culture_fit_rating)
+                    <div class="grid grid-cols-3 gap-3 mb-2 border-t border-gray-100 pt-3">
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Communication</p>
+                            <div class="flex gap-0.5">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star text-xs {{ $i <= $result->communication_rating ? 'text-amber-400' : 'text-gray-200' }}"></i>
+                                @endfor
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Technical</p>
+                            <div class="flex gap-0.5">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star text-xs {{ $i <= $result->technical_rating ? 'text-amber-400' : 'text-gray-200' }}"></i>
+                                @endfor
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Culture fit</p>
+                            <div class="flex gap-0.5">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star text-xs {{ $i <= $result->culture_fit_rating ? 'text-amber-400' : 'text-gray-200' }}"></i>
+                                @endfor
+                            </div>
+                        </div>
+                    </div>
                 @endif
                 @if($result->remarks)
                     <p class="text-xs text-gray-500 leading-relaxed border-t border-gray-100 pt-3 mt-3">{{ $result->remarks }}</p>

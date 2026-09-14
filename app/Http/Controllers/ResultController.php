@@ -26,11 +26,13 @@ class ResultController extends Controller
         abort_if($companyId !== auth()->user()->company->id, 403);
 
         $validated = $request->validate([
+            'communication_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'technical_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'culture_fit_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'remarks' => ['nullable', 'string', 'max:1000'],
             'status' => ['required', 'in:pass,fail'],
         ]);
-
         $interview->result()->create($validated);
 
         $interview->application->update([
@@ -58,6 +60,9 @@ class ResultController extends Controller
         abort_if($companyId !== auth()->user()->company->id, 403);
 
         $validated = $request->validate([
+            'communication_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'technical_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'culture_fit_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'remarks' => ['nullable', 'string', 'max:1000'],
             'status' => ['required', 'in:pass,fail'],

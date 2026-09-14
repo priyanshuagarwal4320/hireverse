@@ -12,6 +12,9 @@ class Result extends Model
 
     protected $fillable = [
         'interview_id',
+        'communication_rating',
+        'technical_rating',
+        'culture_fit_rating',
         'score',
         'remarks',
         'status',
