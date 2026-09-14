@@ -22,7 +22,7 @@
                         class="font-bold text-sm mb-1 hover:text-violet-600 block">
                         {{ $job->job_title }}
                     </a>
-                    <p class="text-xs text-gray-500">
+                                        <p class="text-xs text-gray-500">
                         {{ $job->company->company_name }}
                         @if ($job->location)
                             &middot; {{ $job->location }}
@@ -32,6 +32,12 @@
                             &middot; <span class="text-red-500 font-semibold">Closed</span>
                         @endif
                     </p>
+                    @php $matchPercent = $job->matchPercentage(auth()->user()->candidate?->skills); @endphp
+                    @if ($matchPercent !== null)
+                        <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-md bg-violet-50 text-violet-700 mt-1">
+                            {{ $matchPercent }}% match
+                        </span>
+                    @endif
                 </div>
                 <div class="flex items-center gap-2">
                     <a href="{{ route('candidate.job.detail', $job) }}"

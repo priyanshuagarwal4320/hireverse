@@ -9,8 +9,41 @@
             <i class="fas fa-check-circle"></i> {{ session('status') }}
         </div>
     @endif
-    <h1 class="text-xl font-extrabold mb-1">Browse jobs</h1>
+       <h1 class="text-xl font-extrabold mb-1">Browse jobs</h1>
     <p class="text-gray-500 text-sm mb-6">Matched to your profile and skills</p>
+
+    @php
+        $onboardCandidate = auth()->user()->candidate;
+        $onboardProfileDone = $onboardCandidate && $onboardCandidate->profileCompletion() == 100;
+        $onboardResumeDone = $onboardCandidate && $onboardCandidate->resume;
+        $onboardAppliedDone = $myApplications->count() > 0;
+    @endphp
+
+    @if (!$onboardProfileDone || !$onboardResumeDone || !$onboardAppliedDone)
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 mb-6">
+            <h3 class="text-sm font-bold mb-3">Getting started</h3>
+            <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                    <i class="fas {{ $onboardProfileDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
+                    <span class="text-sm {{ $onboardProfileDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Complete your profile</span>
+                    @if (!$onboardProfileDone)
+                        <a href="{{ route('candidate.profile.edit') }}" class="text-xs font-bold text-violet-600 ml-auto">Complete</a>
+                    @endif
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas {{ $onboardResumeDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
+                    <span class="text-sm {{ $onboardResumeDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Upload your resume</span>
+                    @if (!$onboardResumeDone)
+                        <a href="{{ route('candidate.profile.edit') }}" class="text-xs font-bold text-violet-600 ml-auto">Upload</a>
+                    @endif
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas {{ $onboardAppliedDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
+                    <span class="text-sm {{ $onboardAppliedDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Apply to your first job</span>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <form method="GET" action="{{ route('candidate.dashboard') }}"
         class="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 mb-6 flex flex-col gap-3">
@@ -78,6 +111,12 @@
                                 &middot; &#8377;{{ number_format($job->salary) }}
                             @endif
                         </p>
+                        @php $matchPercent = $job->matchPercentage(auth()->user()->candidate?->skills); @endphp
+                        @if ($matchPercent !== null)
+                            <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-md bg-violet-50 text-violet-700 mt-1">
+                                {{ $matchPercent }}% match
+                            </span>
+                        @endif
                     </div>
                     <div class="flex items-center gap-2">
                         @if (in_array($job->id, $savedJobIds))
@@ -114,6 +153,12 @@
                     No jobs found matching your search.
                 </div>
             @endforelse
+
+            @if ($openJobs->hasPages())
+                <div class="pt-2">
+                    {{ $openJobs->links() }}
+                </div>
+            @endif
         </div>
 
         {{-- Right: my applications --}}

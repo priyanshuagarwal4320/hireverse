@@ -75,31 +75,31 @@ class DashboardController extends Controller
             ->get();
 
         $statusBreakdown = Application::whereIn('job_post_id', $jobIds)
-    ->selectRaw('status, COUNT(*) as total')
-    ->groupBy('status')
-    ->pluck('total', 'status');
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-$applicationsPerJob = Application::whereIn('job_post_id', $jobIds)
-    ->join('job_posts', 'applications.job_post_id', '=', 'job_posts.id')
-    ->selectRaw('job_posts.job_title, COUNT(applications.id) as total')
-    ->groupBy('job_posts.id', 'job_posts.job_title')
-    ->orderByDesc('total')
-    ->take(5)
-    ->pluck('total', 'job_title');
+        $applicationsPerJob = Application::whereIn('job_post_id', $jobIds)
+            ->join('job_posts', 'applications.job_post_id', '=', 'job_posts.id')
+            ->selectRaw('job_posts.job_title, COUNT(applications.id) as total')
+            ->groupBy('job_posts.id', 'job_posts.job_title')
+            ->orderByDesc('total')
+            ->take(5)
+            ->pluck('total', 'job_title');
 
-return view('dashboard.company', compact(
-    'company',
-    'totalJobs',
-    'openJobs',
-    'totalApplicants',
-    'shortlistedCount',
-    'interviewsSetCount',
-    'recentJobs',
-    'recentApplicants',
-    'upcomingInterviews',
-    'statusBreakdown',
-    'applicationsPerJob'
-));
+        return view('dashboard.company', compact(
+            'company',
+            'totalJobs',
+            'openJobs',
+            'totalApplicants',
+            'shortlistedCount',
+            'interviewsSetCount',
+            'recentJobs',
+            'recentApplicants',
+            'upcomingInterviews',
+            'statusBreakdown',
+            'applicationsPerJob'
+        ));
     }
 
     public function candidate(Request $request)
@@ -107,28 +107,28 @@ return view('dashboard.company', compact(
         $candidate = auth()->user()->candidate;
 
         $openJobs = JobPost::where('status', 'open')
-    ->when($request->search, function ($query, $search) {
-        $query->where(function ($q) use ($search) {
-            $q->where('job_title', 'like', "%{$search}%")
-                ->orWhere('location', 'like', "%{$search}%");
-        });
-    })
-    ->when($request->job_type, function ($query, $type) {
-        $query->where('job_type', $type);
-    })
-    ->when($request->min_salary, function ($query, $minSalary) {
-        $query->where('salary', '>=', $minSalary);
-    })
-    ->when($request->max_salary, function ($query, $maxSalary) {
-        $query->where('salary', '<=', $maxSalary);
-    })
-    ->when($request->experience, function ($query, $experience) {
-        $query->where('experience', 'like', "%{$experience}%");
-    })
-    ->with('company')
-    ->latest()
-    ->take(10)
-    ->get();
+            ->when($request->search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('job_title', 'like', "%{$search}%")
+                        ->orWhere('location', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->job_type, function ($query, $type) {
+                $query->where('job_type', $type);
+            })
+            ->when($request->min_salary, function ($query, $minSalary) {
+                $query->where('salary', '>=', $minSalary);
+            })
+            ->when($request->max_salary, function ($query, $maxSalary) {
+                $query->where('salary', '<=', $maxSalary);
+            })
+            ->when($request->experience, function ($query, $experience) {
+                $query->where('experience', 'like', "%{$experience}%");
+            })
+            ->with('company')
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         $myApplications = $candidate
             ? $candidate->applications()->with('jobPost.company', 'interview')->latest()->get()
@@ -143,7 +143,7 @@ return view('dashboard.company', compact(
     public function jobDetail(JobPost $job)
     {
         abort_if($job->status !== 'open', 404);
-
+        $job->incrementViews();
         $candidate = auth()->user()->candidate;
         $alreadyApplied = $candidate
             ? $candidate->applications()->where('job_post_id', $job->id)->exists()

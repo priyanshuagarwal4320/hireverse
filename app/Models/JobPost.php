@@ -15,6 +15,7 @@ class JobPost extends Model
         'company_id',
         'job_title',
         'category',
+        'skills',
         'job_description',
         'job_type',
         'experience',
@@ -42,6 +43,27 @@ class JobPost extends Model
             ->latest()
             ->take(3)
             ->get();
+    }
+    public function matchPercentage($candidateSkills)
+    {
+        if (! $this->skills || ! $candidateSkills) {
+            return null;
+        }
+
+        $jobSkills = array_filter(array_map('trim', explode(',', strtolower($this->skills))));
+        $candidateSkillsList = array_filter(array_map('trim', explode(',', strtolower($candidateSkills))));
+
+        if (count($jobSkills) === 0) {
+            return null;
+        }
+
+        $matched = count(array_intersect($jobSkills, $candidateSkillsList));
+
+        return round(($matched / count($jobSkills)) * 100);
+    }
+    public function incrementViews()
+    {
+        $this->increment('views_count');
     }
     protected $casts = [
         'last_date' => 'date',

@@ -52,6 +52,9 @@
                     <h1 class="text-xl font-extrabold" style="font-family:'Manrope',sans-serif;">{{ $job->job_title }}
                     </h1>
                     <p class="text-sm text-gray-500">{{ $job->company->company_name }}</p>
+                    <p class="text-xs text-gray-400 mt-1">
+                        <i class="fas fa-eye"></i> Viewed by {{ number_format($job->views_count) }} {{ Str::plural('person', $job->views_count) }}
+                    </p>
                 </div>
             </div>
 

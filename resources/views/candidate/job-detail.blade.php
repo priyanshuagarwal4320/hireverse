@@ -19,8 +19,18 @@
             <div>
                 <h1 class="text-xl font-extrabold">{{ $job->job_title }}</h1>
                 <p class="text-sm text-gray-500">{{ $job->company->company_name }}</p>
+                <p class="text-xs text-gray-400 mt-1">
+                    <i class="fas fa-eye"></i> Viewed by {{ number_format($job->views_count) }}
+                    {{ Str::plural('person', $job->views_count) }}
+                </p>
             </div>
         </div>
+        @php $matchPercent = $job->matchPercentage(auth()->user()->candidate?->skills); @endphp
+        @if ($matchPercent !== null)
+            <div class="mb-4 inline-block text-sm font-bold px-4 py-2 rounded-lg bg-violet-50 text-violet-700">
+                <i class="fas fa-bullseye mr-1"></i> {{ $matchPercent }}% skill match with your profile
+            </div>
+        @endif
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 pb-6 border-b border-gray-100">
             <div>

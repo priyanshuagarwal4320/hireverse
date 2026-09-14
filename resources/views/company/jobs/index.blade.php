@@ -44,6 +44,7 @@
                     <th class="px-5 py-3">Type</th>
                     <th class="px-5 py-3">Location</th>
                     <th class="px-5 py-3">Vacancies</th>
+                    <th class="px-5 py-3">Views</th>
                     <th class="px-5 py-3">Status</th>
                     <th class="px-5 py-3 text-right">Actions</th>
                 </tr>
@@ -55,6 +56,9 @@
                         <td class="px-5 py-3">{{ ucfirst(str_replace('_', ' ', $job->job_type)) }}</td>
                         <td class="px-5 py-3">{{ $job->location ?: '—' }}</td>
                         <td class="px-5 py-3">{{ $job->vacancies }}</td>
+                        <td class="px-5 py-3 text-gray-500">
+                            <i class="fas fa-eye text-xs"></i> {{ number_format($job->views_count) }}
+                        </td>
                         <td class="px-5 py-3">
                             <span
                                 class="text-xs font-bold px-3 py-1 rounded-full
@@ -78,7 +82,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-5 py-10 text-center text-gray-400">
+                        <td colspan="7" class="px-5 py-10 text-center text-gray-400">
                             You haven't posted any jobs yet.
                         </td>
                     </tr>

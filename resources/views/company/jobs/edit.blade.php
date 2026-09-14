@@ -57,6 +57,14 @@
                         </div>
 
                         <div>
+                            <x-input-label for="skills" :value="__('Required skills (comma separated)')" />
+                            <x-text-input id="skills" name="skills" type="text" class="block mt-1 w-full"
+                                placeholder="e.g. React, Laravel, MySQL" :value="old('skills', $job->skills)" />
+                            <p class="text-xs text-gray-400 mt-1">Used to show candidates a match score based on their profile skills.</p>
+                            <x-input-error :messages="$errors->get('skills')" class="mt-2" />
+                        </div>
+
+                        <div>
                             <x-input-label for="job_description" :value="__('Job description')" />
                             <textarea id="job_description" name="job_description" rows="5" required
                                 class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('job_description', $job->job_description) }}</textarea>

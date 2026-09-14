@@ -31,6 +31,7 @@ class PublicJobController extends Controller
     public function show(JobPost $job): View
     {
         abort_if($job->status !== 'open', 404);
+        $job->incrementViews();
         $similarJobs = $job->similarJobs();
         return view('public.job-detail', compact('job', 'similarJobs'   ));
     }
