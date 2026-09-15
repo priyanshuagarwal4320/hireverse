@@ -126,6 +126,7 @@ class DashboardController extends Controller
                 $query->where('experience', 'like', "%{$experience}%");
             })
             ->with('company')
+            ->withCount('applications')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -149,6 +150,7 @@ class DashboardController extends Controller
             ? $candidate->applications()->where('job_post_id', $job->id)->exists()
             : false;
 
+        $job->loadCount('applications');
         $job->load('company');
         $similarJobs = $job->similarJobs();
 

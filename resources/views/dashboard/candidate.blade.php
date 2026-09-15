@@ -117,6 +117,9 @@
                                 {{ $matchPercent }}% match
                             </span>
                         @endif
+                         <p class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-users"></i> {{ $job->applications_count }} {{ Str::plural('applicant', $job->applications_count) }} so far
+                        </p>
                     </div>
                     <div class="flex items-center gap-2">
                         @if (in_array($job->id, $savedJobIds))

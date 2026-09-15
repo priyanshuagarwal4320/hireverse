@@ -21,6 +21,7 @@ class PublicJobController extends Controller
                 $query->where('job_type', $type);
             })
             ->with('company')
+            ->withCount('applications')
             ->latest()
             ->paginate(9)
             ->withQueryString();
@@ -32,7 +33,8 @@ class PublicJobController extends Controller
     {
         abort_if($job->status !== 'open', 404);
         $job->incrementViews();
+        $job->loadCount('applications');
         $similarJobs = $job->similarJobs();
-        return view('public.job-detail', compact('job', 'similarJobs'   ));
+        return view('public.job-detail', compact('job', 'similarJobs'));
     }
 }

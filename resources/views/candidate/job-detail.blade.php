@@ -73,7 +73,13 @@
                     </button>
                 </form>
             @endif
+        </div>
 
+        <p class="text-xs text-gray-500 mt-2 mb-3">
+            <i class="fas fa-users"></i> {{ $job->applications_count }} {{ Str::plural('applicant', $job->applications_count) }} so far
+        </p>
+
+        <div class="flex items-center gap-3">
             @if ($isSaved)
                 <form method="POST" action="{{ route('jobs.unsave', $job) }}">
                     @csrf

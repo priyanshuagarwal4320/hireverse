@@ -90,6 +90,9 @@
                 style="background:#171a2e;">
                 Sign up to apply
             </a>
+            <p class="text-xs text-gray-500 mt-3">
+                <i class="fas fa-users"></i> {{ $job->applications_count }} {{ Str::plural('applicant', $job->applications_count) }} so far
+            </p>
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 mt-4">
