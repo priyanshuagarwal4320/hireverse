@@ -9,7 +9,7 @@
             <i class="fas fa-check-circle"></i> {{ session('status') }}
         </div>
     @endif
-       <h1 class="text-xl font-extrabold mb-1">Browse jobs</h1>
+    <h1 class="text-xl font-extrabold mb-1">Browse jobs</h1>
     <p class="text-gray-500 text-sm mb-6">Matched to your profile and skills</p>
 
     @php
@@ -24,22 +24,30 @@
             <h3 class="text-sm font-bold mb-3">Getting started</h3>
             <div class="space-y-2">
                 <div class="flex items-center gap-2">
-                    <i class="fas {{ $onboardProfileDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
-                    <span class="text-sm {{ $onboardProfileDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Complete your profile</span>
+                    <i
+                        class="fas {{ $onboardProfileDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
+                    <span class="text-sm {{ $onboardProfileDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Complete
+                        your profile</span>
                     @if (!$onboardProfileDone)
-                        <a href="{{ route('candidate.profile.edit') }}" class="text-xs font-bold text-violet-600 ml-auto">Complete</a>
+                        <a href="{{ route('candidate.profile.edit') }}"
+                            class="text-xs font-bold text-violet-600 ml-auto">Complete</a>
                     @endif
                 </div>
                 <div class="flex items-center gap-2">
-                    <i class="fas {{ $onboardResumeDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
-                    <span class="text-sm {{ $onboardResumeDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Upload your resume</span>
+                    <i
+                        class="fas {{ $onboardResumeDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
+                    <span class="text-sm {{ $onboardResumeDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Upload
+                        your resume</span>
                     @if (!$onboardResumeDone)
-                        <a href="{{ route('candidate.profile.edit') }}" class="text-xs font-bold text-violet-600 ml-auto">Upload</a>
+                        <a href="{{ route('candidate.profile.edit') }}"
+                            class="text-xs font-bold text-violet-600 ml-auto">Upload</a>
                     @endif
                 </div>
                 <div class="flex items-center gap-2">
-                    <i class="fas {{ $onboardAppliedDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
-                    <span class="text-sm {{ $onboardAppliedDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Apply to your first job</span>
+                    <i
+                        class="fas {{ $onboardAppliedDone ? 'fa-check-circle text-green-500' : 'fa-circle text-gray-300' }} text-sm"></i>
+                    <span class="text-sm {{ $onboardAppliedDone ? 'text-gray-400 line-through' : 'text-gray-700' }}">Apply
+                        to your first job</span>
                 </div>
             </div>
         </div>
@@ -64,6 +72,20 @@
                 <option value="contract" {{ request('job_type') === 'contract' ? 'selected' : '' }}>Contract</option>
                 <option value="internship" {{ request('job_type') === 'internship' ? 'selected' : '' }}>Internship</option>
             </select>
+            <select name="category"
+                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                <option value="">All categories</option>
+                <option value="Engineering" {{ request('category') === 'Engineering' ? 'selected' : '' }}>Engineering
+                </option>
+                <option value="Design" {{ request('category') === 'Design' ? 'selected' : '' }}>Design</option>
+                <option value="Sales" {{ request('category') === 'Sales' ? 'selected' : '' }}>Sales</option>
+                <option value="Marketing" {{ request('category') === 'Marketing' ? 'selected' : '' }}>Marketing</option>
+                <option value="Customer Support" {{ request('category') === 'Customer Support' ? 'selected' : '' }}>
+                    Customer Support</option>
+                <option value="HR" {{ request('category') === 'HR' ? 'selected' : '' }}>HR</option>
+                <option value="Finance" {{ request('category') === 'Finance' ? 'selected' : '' }}>Finance</option>
+                <option value="Other" {{ request('category') === 'Other' ? 'selected' : '' }}>Other</option>
+            </select>
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
             <select name="experience"
@@ -83,7 +105,12 @@
                 style="background:#171a2e;">
                 Search
             </button>
-            @if (request('search') || request('job_type') || request('experience') || request('min_salary') || request('max_salary'))
+            @if (request('search') ||
+                    request('job_type') ||
+                    request('category') ||
+                    request('experience') ||
+                    request('min_salary') ||
+                    request('max_salary'))
                 <a href="{{ route('candidate.dashboard') }}"
                     class="text-xs font-semibold text-gray-400 self-center whitespace-nowrap">Clear</a>
             @endif
@@ -113,12 +140,14 @@
                         </p>
                         @php $matchPercent = $job->matchPercentage(auth()->user()->candidate?->skills); @endphp
                         @if ($matchPercent !== null)
-                            <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-md bg-violet-50 text-violet-700 mt-1">
+                            <span
+                                class="inline-block text-xs font-bold px-2 py-0.5 rounded-md bg-violet-50 text-violet-700 mt-1">
                                 {{ $matchPercent }}% match
                             </span>
                         @endif
-                         <p class="text-xs text-gray-400 mt-1">
-                            <i class="fas fa-users"></i> {{ $job->applications_count }} {{ Str::plural('applicant', $job->applications_count) }} so far
+                        <p class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-users"></i> {{ $job->applications_count }}
+                            {{ Str::plural('applicant', $job->applications_count) }} so far
                         </p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -169,13 +198,14 @@
             <div class="px-5 py-4 border-b border-gray-200">
                 <h3 class="text-sm font-bold">My applications</h3>
             </div>
-                        <div class="p-2">
+            <div class="p-2">
                 @forelse($myApplications as $app)
                     <div class="px-3 py-3 border-b border-gray-100 last:border-0">
                         <div class="flex items-center justify-between">
                             <span class="text-sm">{{ $app->jobPost->job_title }} <span
                                     class="text-gray-400">({{ $app->jobPost->company->company_name }})</span></span>
-                            <span class="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ml-2
+                            <span
+                                class="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ml-2
                                 @if ($app->status === 'pending') bg-amber-50 text-amber-700
                                 @elseif($app->status === 'shortlisted') bg-violet-50 text-violet-700
                                 @elseif($app->status === 'selected') bg-green-50 text-green-700

@@ -41,12 +41,23 @@
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by job title or location..."
                     class="block w-full pl-9 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
             </div>
-            <select name="job_type" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                        <select name="job_type" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
                 <option value="">All types</option>
                 <option value="full_time" {{ request('job_type') === 'full_time' ? 'selected' : '' }}>Full time</option>
                 <option value="part_time" {{ request('job_type') === 'part_time' ? 'selected' : '' }}>Part time</option>
                 <option value="contract" {{ request('job_type') === 'contract' ? 'selected' : '' }}>Contract</option>
                 <option value="internship" {{ request('job_type') === 'internship' ? 'selected' : '' }}>Internship</option>
+            </select>
+            <select name="category" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                <option value="">All categories</option>
+                <option value="Engineering" {{ request('category') === 'Engineering' ? 'selected' : '' }}>Engineering</option>
+                <option value="Design" {{ request('category') === 'Design' ? 'selected' : '' }}>Design</option>
+                <option value="Sales" {{ request('category') === 'Sales' ? 'selected' : '' }}>Sales</option>
+                <option value="Marketing" {{ request('category') === 'Marketing' ? 'selected' : '' }}>Marketing</option>
+                <option value="Customer Support" {{ request('category') === 'Customer Support' ? 'selected' : '' }}>Customer Support</option>
+                <option value="HR" {{ request('category') === 'HR' ? 'selected' : '' }}>HR</option>
+                <option value="Finance" {{ request('category') === 'Finance' ? 'selected' : '' }}>Finance</option>
+                <option value="Other" {{ request('category') === 'Other' ? 'selected' : '' }}>Other</option>
             </select>
             <button type="submit" class="text-xs font-bold px-5 py-2 rounded-lg text-white" style="background:#171a2e;">Search</button>
         </form>

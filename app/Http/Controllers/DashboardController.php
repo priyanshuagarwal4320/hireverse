@@ -116,6 +116,9 @@ class DashboardController extends Controller
             ->when($request->job_type, function ($query, $type) {
                 $query->where('job_type', $type);
             })
+            ->when($request->category, function ($query, $category) {
+                $query->where('category', $category);
+            })
             ->when($request->min_salary, function ($query, $minSalary) {
                 $query->where('salary', '>=', $minSalary);
             })

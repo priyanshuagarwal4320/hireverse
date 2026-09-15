@@ -20,6 +20,9 @@ class PublicJobController extends Controller
             ->when($request->job_type, function ($query, $type) {
                 $query->where('job_type', $type);
             })
+             ->when($request->category, function ($query, $category) {
+                $query->where('category', $category);
+            })
             ->with('company')
             ->withCount('applications')
             ->latest()
