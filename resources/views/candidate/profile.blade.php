@@ -77,8 +77,36 @@
                                     <span class="text-xs text-gray-400">Current photo</span>
                                 </div>
                             @endif
-                            <input id="profile_photo" name="profile_photo" type="file" accept="image/*"
-                                class="block mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700" />
+
+                            <div class="flex items-center gap-3 mt-1">
+                                <input id="profile_photo" name="profile_photo" type="file" accept="image/*"
+                                    class="block flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700" />
+                                <button type="button" onclick="openCamera()"
+                                    class="text-xs font-semibold px-3 py-2 rounded-md border border-gray-200 text-gray-600 whitespace-nowrap">
+                                    <i class="fas fa-camera mr-1"></i> Take a photo
+                                </button>
+                            </div>
+
+                            <div id="cameraBox" style="display:none;" class="mt-3 border border-gray-200 rounded-xl p-3 max-w-xs">
+                                <video id="cameraPreview" autoplay playsinline class="w-full rounded-lg bg-gray-900"></video>
+                                <canvas id="cameraCanvas" class="w-full rounded-lg" style="display:none;"></canvas>
+
+                                <div class="flex items-center gap-2 mt-3">
+                                    <button type="button" id="captureBtn" onclick="capturePhoto()"
+                                        class="text-xs font-bold px-4 py-2 rounded-lg bg-gray-900 text-white">
+                                        Capture
+                                    </button>
+                                    <button type="button" id="retakeBtn" onclick="retakePhoto()" style="display:none;"
+                                        class="text-xs font-semibold px-4 py-2 rounded-lg border border-gray-200 text-gray-600">
+                                        Retake
+                                    </button>
+                                    <button type="button" onclick="closeCamera()"
+                                        class="text-xs font-semibold px-4 py-2 rounded-lg border border-gray-200 text-gray-600">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+
                             <x-input-error :messages="$errors->get('profile_photo')" class="mt-2" />
                         </div>
                         <div>
@@ -185,5 +213,63 @@
         </div>
 
     </div>
+
+    <script>
+        let cameraStream = null;
+
+        function openCamera() {
+            document.getElementById('cameraBox').style.display = 'block';
+            document.getElementById('cameraPreview').style.display = 'block';
+            document.getElementById('cameraCanvas').style.display = 'none';
+            document.getElementById('captureBtn').style.display = 'inline-block';
+            document.getElementById('retakeBtn').style.display = 'none';
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    cameraStream = stream;
+                    document.getElementById('cameraPreview').srcObject = stream;
+                })
+                .catch(function () {
+                    alert('Could not access camera. Please allow camera permission or use file upload instead.');
+                    closeCamera();
+                });
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraPreview');
+            const canvas = document.getElementById('cameraCanvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            canvas.toBlob(function (blob) {
+                const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                document.getElementById('profile_photo').files = dataTransfer.files;
+            }, 'image/jpeg', 0.9);
+
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+            document.getElementById('captureBtn').style.display = 'none';
+            document.getElementById('retakeBtn').style.display = 'inline-block';
+
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(function (track) { track.stop(); });
+            }
+        }
+
+        function retakePhoto() {
+            openCamera();
+        }
+
+        function closeCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(function (track) { track.stop(); });
+                cameraStream = null;
+            }
+            document.getElementById('cameraBox').style.display = 'none';
+        }
+    </script>
 
 @endsection

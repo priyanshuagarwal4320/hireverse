@@ -51,9 +51,9 @@
                 </div>
             </div>
         </div>
-        <div class="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+        {{-- <div class="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
             <i class="fas fa-envelope text-sm"></i>
-        </div>
+        </div> --}}
         @php
             $topbarAvatar = null;
             if (auth()->user()->role === 'company' && auth()->user()->company?->logo) {
